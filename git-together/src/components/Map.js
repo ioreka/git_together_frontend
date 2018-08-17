@@ -3,11 +3,6 @@ import GoogleMapReact from 'google-map-react'
 import Pin from './Pin'
 
 class Map extends React.Component {
-  render() {
-    return (
-      <div className="Map">
-
-
 
   static defaultProps = {
     center: {
