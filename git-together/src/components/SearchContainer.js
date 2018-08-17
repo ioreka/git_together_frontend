@@ -4,11 +4,15 @@ import SearchResults from './SearchResults'
 
 
 class SearchContainer extends React.Component {
-  render() {
+
+  render(){
     return (
-      <div className="SearchContainer">
-        <SearchForm handleUserInput={this.props.handleUserInput} getData={this.props.getData}/>
-        <SearchResults />
+      <div>
+        <SearchForm
+          getEventData={this.props.getEventData}/>
+        <SearchResults
+          events={this.props.events}/>
+
       </div>
     )
   }

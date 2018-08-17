@@ -5,10 +5,14 @@ import SearchContainer from './SearchContainer'
 class Sidebar extends React.Component {
   render() {
     return (
-      <div className="SearchBar">
-        <AuthBox handleUserInput={this.props.handleUserInput} />
-        <SearchContainer handleUserInput={this.props.handleUserInput} getData={this.props.getData}/>
-      </div>
+      <div>
+        <AuthBox />
+        <SearchContainer
+          events={this.props.events}
+          getEventData={this.props.getEventData}
+        />
+      </div>  
+
     )
   }
 }

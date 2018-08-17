@@ -1,10 +1,12 @@
 import React from 'react'
 
 class SearchResults extends React.Component {
-  render() {
-    return (
-      <div className="SearchResults">
 
+  //conditionally render; if no search results, show nil/"nothing found yet"
+  render () {
+    return (
+      <div>
+      SEARCH RESULTS
       </div>
     )
   }
