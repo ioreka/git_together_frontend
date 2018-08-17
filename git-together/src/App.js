@@ -13,11 +13,16 @@ class App extends Component {
     myEvents: false
   }
 
-  getData = (e) => {
+  getEventData = (e, topic, location) => {
+    console.log(e)
+    console.log(topic)
+    console.log(location)
+
     e.preventDefault()
-    fetch(`http://localhost:3000/api/v1/getevents?topic=${this.state.topic}&location=${this.state.location}`)
+    fetch(`http://localhost:3008/api/v1/getevents?topic=${topic}&location=${location}`)
     .then(r => r.json())
     .then(events => {
+      console.log(events)
       this.setState({
         events: events
       })
