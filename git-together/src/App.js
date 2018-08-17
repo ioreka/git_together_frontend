@@ -5,12 +5,21 @@ import './App.css'
 import Sidebar from './components/Sidebar'
 import Map from './components/Map'
 import MyEvents from './components/MyEvents'
+import SideEventDetails from './components/SideEventDetails'
+
 
 
 class App extends Component {
   state = {
     events:[],
-    myEvents: false
+    myEvents: false,
+    selectedEvent: false
+  }
+
+  selectEvent = (e) => {
+    this.setState({
+      selectedEvent: e
+    })
   }
 
   sidebarOpen = () => {
@@ -42,6 +51,8 @@ class App extends Component {
     if (!this.state.myEvents) {
       return (
         <Map
+          selectEvent={this.selectEvent}
+          selectedEvent={this.state.selectedEvent}
           events={this.state.events}
         />
 
@@ -53,6 +64,13 @@ class App extends Component {
       )
     }
   }
+
+
+  openNav = () => {
+    document.getElementById("mySidenav").style.width = "250px";
+  }
+
+
 
  render() {
     return (
@@ -68,6 +86,7 @@ class App extends Component {
         events={this.state.events}
       />
         {this.renderMapOrMyEvents()}
+        {this.state.selectedEvent ? <SideEventDetails selectedEvent={this.state.selectedEvent} selectEvent={this.selectEvent}/> : null }
       </div>
     )
   }
