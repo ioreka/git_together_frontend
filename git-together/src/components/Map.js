@@ -12,6 +12,7 @@ class Map extends React.Component {
     zoom: 11
   }
 
+
   render() {
     let pins = []
     if (this.props.events.length > 0){
@@ -28,15 +29,18 @@ class Map extends React.Component {
     }
 
     return (
-      <div style={{ height: '100vh', width: '100%' }}>
-        <GoogleMapReact
-          bootstrapURLKeys={{ key: "AIzaSyAhlNg9SyzsjkZk-9rTBDC8BthNPMbH-uc"}}
-          defaultCenter={this.props.center}
-          defaultZoom={this.props.zoom}
-        >
-        {pins}
-        </GoogleMapReact>
-      </div>
+      <React.Fragment>
+      <div class="w3-container">
+          <div style={{ height: '100vh', width: '100%' }}>
+            <GoogleMapReact
+              bootstrapURLKeys={{ key: "AIzaSyAhlNg9SyzsjkZk-9rTBDC8BthNPMbH-uc"}}
+              defaultCenter={this.props.center}
+              defaultZoom={this.props.zoom}
+            >
+            </GoogleMapReact>
+          </div>
+        </div>
+      </React.Fragment>
     )
   }
 }

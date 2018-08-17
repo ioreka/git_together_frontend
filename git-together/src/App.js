@@ -1,5 +1,7 @@
-import React, { Component } from 'react'
+
+import React, { Component } from 'react';
 import './App.css'
+
 import Sidebar from './components/Sidebar'
 import Map from './components/Map'
 import MyEvents from './components/MyEvents'
@@ -19,6 +21,15 @@ class App extends Component {
       selectedEvent: e
     })
   }
+
+  sidebarOpen = () => {
+    document.getElementById("mySidebar").style.display = "block";
+  }
+
+  sidebarClose = () => {
+  document.getElementById("mySidebar").style.display = "none";
+}
+
 
   getEventData = (e, topic, location) => {
     console.log(e)
@@ -54,17 +65,19 @@ class App extends Component {
     }
   }
 
-  openNav = () => {
-    document.getElementById("mySidenav").style.width = "250px";
-  }
-
-  render() {
+ render() {
     return (
       <div className="App">
-        <Sidebar
-          getEventData={this.getEventData}
-          events={this.state.events}
-        />
+      <button class="w3-button w3-white w3-xxlarge" onClick={() => {
+        document.getElementById("mySidebar").style.display == "block"
+          ? this.sidebarClose()
+          : this.sidebarOpen() }
+        } > &#9776;
+      </button>
+      <Sidebar
+        getEventData={this.getEventData}
+        events={this.state.events}
+      />
         {this.renderMapOrMyEvents()}
         {this.state.selectedEvent ? <SideEventDetails selectedEvent={this.state.selectedEvent} selectEvent={this.selectEvent}/> : null }
       </div>
