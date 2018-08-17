@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
-import logo from './logo.svg';
-import './App.css';
+
 import Sidebar from './components/Sidebar'
 import Map from './components/Map'
 
@@ -29,19 +28,8 @@ class App extends Component {
   render() {
     return (
       <div className="App">
-        <Sidebar />
+        <Sidebar handleUserInput={this.handleUserInput} getData={this.getData}/>
         <Map />
-        <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <h1 className="App-title">Welcome to React</h1>
-        </header>
-        <p className="App-intro">
-        </p>
-          <label>Topic:</label>
-          <input type="text" name="topic" onChange={this.handleUserInput}/>
-          <label>Location:</label>
-          <input type="text" name="location" onChange={this.handleUserInput}/>
-          <button onClick={this.getData}>Click it!!!</button>
       </div>
     );
   }
