@@ -65,6 +65,13 @@ class App extends Component {
     }
   }
 
+
+  openNav = () => {
+    document.getElementById("mySidenav").style.width = "250px";
+  }
+
+
+
  render() {
     return (
       <div className="App">
