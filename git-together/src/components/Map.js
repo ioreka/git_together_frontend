@@ -4,6 +4,8 @@ import Pin from './Pin'
 
 class Map extends React.Component {
 
+
+
   static defaultProps = {
     center: {
       lat: 59.95,
@@ -31,19 +33,23 @@ class Map extends React.Component {
   //   this.setPins()
   // }
 
+
   render() {
     let pin = this.props.events[0]
     console.log(pin)
     return (
-      <div style={{ height: '100vh', width: '100%' }}>
-        <GoogleMapReact
-          bootstrapURLKeys={{ key: "AIzaSyAhlNg9SyzsjkZk-9rTBDC8BthNPMbH-uc"}}
-          defaultCenter={this.props.center}
-          defaultZoom={this.props.zoom}
-        >
-        </GoogleMapReact>
-
-      </div>
+      <React.Fragment>
+      <div class="w3-container">
+          <div style={{ height: '100vh', width: '100%' }}>
+            <GoogleMapReact
+              bootstrapURLKeys={{ key: "AIzaSyAhlNg9SyzsjkZk-9rTBDC8BthNPMbH-uc"}}
+              defaultCenter={this.props.center}
+              defaultZoom={this.props.zoom}
+            >
+            </GoogleMapReact>
+          </div>
+        </div>
+      </React.Fragment>
     )
   }
 }

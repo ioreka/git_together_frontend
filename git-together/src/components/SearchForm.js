@@ -1,4 +1,5 @@
 import React from 'react'
+import '../App.css'
 
 class SearchForm extends React.Component {
 
@@ -16,11 +17,19 @@ class SearchForm extends React.Component {
   render() {
     return (
       <div>
+        <p>
         <label>Topic:</label>
-        <input type="text" name="topic" onChange={this.handleUserInput}/>
+        <input type="text" name="topic" class="searchFormInput" onChange={this.handleUserInput}/>
+        </p>
+
+        <p>
         <label>Location:</label>
-        <input type="text" name="location" onChange={this.handleUserInput}/>
+        <input type="text" name="location" class="searchFormInput" onChange={this.handleUserInput}/>
+        </p>
+
+        <p>
         <button onClick={(e) => {this.props.getEventData(e,this.state.topic, this.state.location)}}>Seach for events!</button>
+        </p>
       </div>
     )
   }
