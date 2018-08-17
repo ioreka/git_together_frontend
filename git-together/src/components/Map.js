@@ -4,37 +4,29 @@ import Pin from './Pin'
 
 class Map extends React.Component {
 
-
   static defaultProps = {
     center: {
-      lat: 59.95,
-      lng: 30.33
+      lat: 51.509865,
+      lng: 0.118092
     },
     zoom: 11
   }
-  //
-  // setPins = () => {
-  //   let pins = this.props.events.forEach((e) => {
-  //       console.log("e", e)
-  //       return e.map((ev) => {
-  //         console.log("ev", e)
-  //         return <Pin lat={ev.venue.lat} lon={ev.venue.lon} />
-  //       })
-  //     })
-  //   this.setState({
-  //     pins: pins
-  //   })
-  // }
-
-
-
-  // componentDidMount() {
-  //   this.setPins()
-  // }
 
   render() {
-    let pin = this.props.events[0]
-    console.log(pin)
+    let pins = []
+    if (this.props.events.length > 0){
+      this.props.events.forEach((e) => {
+        e.map((ev) => {
+          pins.push(<Pin
+            selectedEvent={this.props.selectedEvent}
+            selectEvent={this.props.selectEvent}
+            ev={ev} lat={ev.venue.lat}
+            lng={ev.venue.lon}
+            name={ev.name}/>)
+        })
+      })
+    }
+
     return (
       <div style={{ height: '100vh', width: '100%' }}>
         <GoogleMapReact
@@ -42,6 +34,7 @@ class Map extends React.Component {
           defaultCenter={this.props.center}
           defaultZoom={this.props.zoom}
         >
+        {pins}
         </GoogleMapReact>
       </div>
     )
