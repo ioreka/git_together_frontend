@@ -20,7 +20,7 @@ class SearchForm extends React.Component {
         <input type="text" name="topic" onChange={this.handleUserInput}/>
         <label>Location:</label>
         <input type="text" name="location" onChange={this.handleUserInput}/>
-        <button onClick={this.getData}>Click it!!!</button>
+        <button onClick={this.getData}>Seach for events!</button>
       </div>
     )
   }

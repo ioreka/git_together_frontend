@@ -2,6 +2,10 @@ import React from 'react'
 import GoogleMapReact from 'google-map-react'
 
 class Map extends React.Component {
+  render() {
+    return (
+      <div className="Map">
+
 
   static defaultProps = {
     center: {
@@ -20,6 +24,7 @@ class Map extends React.Component {
           defaultZoom={this.props.zoom}
         >
         </GoogleMapReact>
+
       </div>
     )
   }
