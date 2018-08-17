@@ -1,5 +1,7 @@
-import React, { Component } from 'react'
+
+import React, { Component } from 'react';
 import './App.css'
+
 import Sidebar from './components/Sidebar'
 import Map from './components/Map'
 import MyEvents from './components/MyEvents'
@@ -43,7 +45,7 @@ class App extends Component {
     }
   }
 
-  render() {
+ render() {
     return (
       <div className="App">
       <Sidebar

@@ -12,6 +12,7 @@ class Sidebar extends React.Component {
           getEventData={this.props.getEventData}
         />
       </div>  
+
     )
   }
 }
