@@ -13,6 +13,15 @@ class App extends Component {
     myEvents: false
   }
 
+  sidebarOpen = () => {
+    document.getElementById("mySidebar").style.display = "block";
+  }
+
+  sidebarClose = () => {
+  document.getElementById("mySidebar").style.display = "none";
+}
+
+
   getEventData = (e, topic, location) => {
     console.log(e)
     console.log(topic)
@@ -48,6 +57,12 @@ class App extends Component {
  render() {
     return (
       <div className="App">
+      <button class="w3-button w3-white w3-xxlarge" onClick={() => {
+        document.getElementById("mySidebar").style.display == "block"
+          ? this.sidebarClose()
+          : this.sidebarOpen() }
+        } > &#9776;
+      </button>
       <Sidebar
         getEventData={this.getEventData}
         events={this.state.events}
