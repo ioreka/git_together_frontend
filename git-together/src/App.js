@@ -30,6 +30,21 @@ class App extends Component {
   document.getElementById("mySidebar").style.display = "none";
 }
 
+addToMyEvents = (body) => {
+  this.setState({
+    
+  })
+
+
+  // fetch('http://localhost:3008/api/v1/events', {
+  //   method: "POST",
+  //   headers: {
+  //     "Content-type" : "application/json"
+  //   },
+  //   body: body
+  // })
+  // .then(r => console.log(r))
+}
 
   getEventData = (e, topic, location) => {
     console.log(e)
@@ -64,13 +79,6 @@ class App extends Component {
       )
     }
   }
-
-
-  openNav = () => {
-    document.getElementById("mySidenav").style.width = "250px";
-  }
-
-
 
  render() {
     return (
