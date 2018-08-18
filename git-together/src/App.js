@@ -13,7 +13,19 @@ class App extends Component {
   state = {
     events:[],
     myEvents: false,
-    selectedEvent: false
+    selectedEvent: false,
+    filterBy:{
+      today: false,
+      tomorrow: false
+    }
+  }
+
+  filterEvents = (e) => {
+    let bool = e.target.checked
+    let newFilter = {...this.state.filterBy}
+    this.setState({
+      filterBy: {...this.state.filterBy, [e.target.name] : e.target.checked}
+    })
   }
 
   selectEvent = (e) => {
@@ -32,7 +44,7 @@ class App extends Component {
 
 addToMyEvents = (body) => {
   this.setState({
-    
+
   })
 
 
@@ -62,15 +74,14 @@ addToMyEvents = (body) => {
     })
   }
 
-  renderMapOrMyEvents = () => {
+  renderMapOrMyEvents = (filteredEvents) => {
     if (!this.state.myEvents) {
       return (
         <Map
           selectEvent={this.selectEvent}
           selectedEvent={this.state.selectedEvent}
-          events={this.state.events}
+          events={filteredEvents}
         />
-
       )
     }
     else {
@@ -80,7 +91,67 @@ addToMyEvents = (body) => {
     }
   }
 
+  filterTdy = () => {
+    let f = [];
+    this.state.events.forEach((ev) => {
+      f.push()
+      let x = ev.filter((e) => {
+       var date = new Date();
+       date.setDate(date.getDate());
+       date.setHours(0,0,0,0)
+       console.log("tdy", date)
+
+       let mydate=new Date(e.local_date);
+       mydate.setHours(0,0,0,0)
+       console.log("thy", mydate)
+
+       return mydate.getTime() === date.getTime()
+     })
+     f.push(x)
+    })
+    return f
+  }
+
+  filterTmr = () => {
+    let f = [];
+    this.state.events.forEach((ev) => {
+      f.push()
+      let x = ev.filter((e) => {
+       var date = new Date();
+       date.setDate(date.getDate() + 1);
+       date.setHours(0,0,0,0)
+       console.log("tmr", date)
+       let mydate=new Date(e.local_date);
+       mydate.setDate(mydate.getDate());
+       mydate.setHours(0,0,0,0)
+       console.log("tmr", mydate)
+
+       return mydate.getTime() === date.getTime()
+     })
+     f.push(x)
+    })
+    return f
+  }
+
  render() {
+   let filteredEvents = this.state.events
+
+   if (this.state.filterBy.today) {
+     filteredEvents = this.filterTdy()
+     console.log("Today", filteredEvents)
+   }
+
+   if (this.state.filterBy.tomorrow) {
+     filteredEvents = this.filterTmr()
+     console.log("Tmr", filteredEvents)
+
+   }
+
+   if(this.state.filterBy.today && this.state.filterBy.tomorrow){
+     filteredEvents = [...this.filterTdy(), ...this.filterTmr()]
+     console.log( console.log("TmrTdy", filteredEvents))
+   }
+
     return (
       <div className="App">
       <button class="w3-button w3-white w3-xxlarge" onClick={() => {
@@ -92,8 +163,8 @@ addToMyEvents = (body) => {
       <Sidebar
         getEventData={this.getEventData}
         events={this.state.events}
-      />
-        {this.renderMapOrMyEvents()}
+        filterEvents={this.filterEvents}/>
+        {this.renderMapOrMyEvents(filteredEvents)}
         {this.state.selectedEvent ? <SideEventDetails selectedEvent={this.state.selectedEvent} selectEvent={this.selectEvent}/> : null }
       </div>
     )

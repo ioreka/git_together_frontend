@@ -1,6 +1,8 @@
 import React from 'react'
 import AuthBox from './AuthBox'
 import SearchContainer from './SearchContainer'
+import Filter from './Filter'
+
 import Calendar from 'react-calendar'
 import '../App.css'
 
@@ -25,6 +27,8 @@ class Sidebar extends React.Component {
           events={this.props.events}
           getEventData={this.props.getEventData}
         />
+        <Filter
+          filterEvents={this.props.filterEvents}/>
         My events:
         <Calendar
           onChange={this.onChange}
