@@ -19,12 +19,12 @@ class SearchForm extends React.Component {
       <div>
         <p>
         <label>Topic:</label>
-        <input type="text" name="topic" class="searchFormInput" onChange={this.handleUserInput}/>
+        <input type="text" name="topic" className="searchFormInput" onChange={this.handleUserInput}/>
         </p>
 
         <p>
         <label>Location:</label>
-        <input type="text" name="location" class="searchFormInput" onChange={this.handleUserInput}/>
+        <input type="text" name="location" className="searchFormInput" onChange={this.handleUserInput}/>
         </p>
 
         <p>

@@ -21,8 +21,8 @@ class Sidebar extends React.Component {
 
   render() {
     return (
-      <div id="sidebar" class="w3-sidebar w3-bar-block w3-dark-grey w3-animate-left" styles="display:none" id="mySidebar">
-        <AuthBox />
+      <div id="sidebar" className="w3-sidebar w3-bar-block w3-dark-grey w3-animate-left" styles="display:none" id="mySidebar">
+        <AuthBox current_user={this.props.current_user}/>
         <SearchContainer
           events={this.props.events}
           getEventData={this.props.getEventData}

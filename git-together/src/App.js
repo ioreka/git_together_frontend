@@ -1,16 +1,20 @@
 
 import React, { Component } from 'react';
 import './App.css'
-
+import { Route, Switch, Redirect, withRouter } from 'react-router-dom'
+import NotFound from './util/NotFound'
 import Sidebar from './components/Sidebar'
 import Map from './components/Map'
 import MyEvents from './components/MyEvents'
 import SideEventDetails from './components/SideEventDetails'
+import { createUser } from './adapter/adapter'
+import AuthAction from './auth/AuthAction'
 
 
 
 class App extends Component {
   state = {
+    current_user: null,
     events:[],
     myEvents: false,
     selectedEvent: false,
@@ -152,18 +156,38 @@ addToMyEvents = (body) => {
 
     return (
       <div className="App">
-      <button class="w3-button w3-white w3-xxlarge" onClick={() => {
-        document.getElementById("mySidebar").style.display == "block"
-          ? this.sidebarClose()
-          : this.sidebarOpen() }
-        } > &#9776;
-      </button>
-      <Sidebar
-        getEventData={this.getEventData}
-        events={this.state.events}
-        filterEvents={this.filterEvents}/>
-        {this.renderMapOrMyEvents(filteredEvents)}
-        {this.state.selectedEvent ? <SideEventDetails selectedEvent={this.state.selectedEvent} selectEvent={this.selectEvent} addToMyEvents={this.addToMyEvents}/> : null }
+        <Switch>
+          <Route path="/" render={() => {
+            return (
+              <React.Fragment>
+              <button className="w3-button w3-white w3-xxlarge" onClick={() => {
+                document.getElementById("mySidebar").style.display === "block"
+                ? this.sidebarClose()
+                : this.sidebarOpen() }
+              } > &#9776;
+              </button>
+              <Sidebar
+              getEventData={this.getEventData}
+              events={this.state.events}
+              filterEvents={this.filterEvents}
+              current_user={this.state.current_user}/>
+
+              {this.renderMapOrMyEvents(filteredEvents)}
+              {this.state.selectedEvent ? <SideEventDetails selectedEvent={this.state.selectedEvent} selectEvent={this.selectEvent} addToMyEvents={this.addToMyEvents}/> : null }
+              </React.Fragment>
+            )
+          }} />
+          <Route path="/signup" render={() => {
+            return (<AuthAction header="Sign up!"/>)
+          }} />
+          <Route path="/login" render={() => {
+            return(console.log('whaaaaaat'))
+            // return (<AuthAction header="Log in!"/>)
+
+          }} />
+          <Route path="/404" component={NotFound} />
+        </Switch>
+
       </div>
     )
   }
