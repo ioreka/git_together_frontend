@@ -12,7 +12,7 @@ import SideEventDetails from './components/SideEventDetails'
 class App extends Component {
   state = {
     events:[],
-    myEvents: false,
+    myEvents: [],
     selectedEvent: false,
     filterBy:{
       today: false,
@@ -164,7 +164,11 @@ addToMyEvents = (body) => {
         getEventData={this.getEventData}
         events={this.state.events}
         filterEvents={this.filterEvents}/>
-        {this.renderMapOrMyEvents(filteredEvents)}
+        <Map
+          selectEvent={this.selectEvent}
+          selectedEvent={this.state.selectedEvent}
+          events={filteredEvents}
+        />
         {this.state.selectedEvent ? <SideEventDetails selectedEvent={this.state.selectedEvent} selectEvent={this.selectEvent}/> : null }
       </div>
     )
