@@ -186,6 +186,7 @@ addToMyEvents = (body) => {
 
           }} />
           <Route path="/404" component={NotFound} />
+          <Redirect to="/404" />
         </Switch>
 
       </div>
@@ -193,4 +194,4 @@ addToMyEvents = (body) => {
   }
 }
 
-export default App;
+export default withRouter(App);
