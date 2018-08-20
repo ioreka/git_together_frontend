@@ -52,7 +52,10 @@ class Sidebar extends React.Component {
     currentTime =  currentTime.getTime()
     return (
       <div id="sidebar" className="w3-sidebar w3-bar-block w3-dark-grey w3-animate-left" styles="display:none" id="mySidebar">
-        <AuthBox current_user={this.props.current_user}/>
+        <AuthBox
+          current_user={this.props.current_user}
+          logOut={this.props.logOut}
+        />
         <SearchContainer
           events={this.props.events}
           getEventData={this.props.getEventData}

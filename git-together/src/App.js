@@ -25,14 +25,67 @@ class App extends Component {
       tomorrow: false
     },
     selectedDate: false,
-    mySelectedEvent: false
+    mySelectedEvent: false,
+    previouslySeenUser: null
+  }
+/////////////////////////////
+
+  fetchMyEvents = () => {
+    if (this.state.current_user && this.state.current_user !== this.state.previouslySeenUser) {
+      getUserEvents(this.state.current_user.id, localStorage.getItem('token')).then(events => {
+        this.setState({
+          myEvents: events,
+          previouslySeenUser: this.state.current_user
+        })
+      })
+    }
   }
 
-  addToMyEvents = (body) => {
-    this.setState({
-      myEvents: [...this.state.myEvents, body]
+  setEvents = () => {
+    const event_ids = this.state.myEvents.map(ev => ev.id)
+    setUserEvents(this.state.current_user.id, localStorage.getItem('token'), event_ids).then(new_events => {
+      this.setState({
+        myEvents: new_events
+      })
     })
   }
+
+  addToMyEvents = (event) => {
+    if (!this.state.myEvents.includes(event)) {
+      this.setState(prevState => {
+        return {
+          myEvents: [...prevState.myEvents, event]
+        }
+      }, this.setEvents)
+    }
+
+
+  }
+
+  removeFromMyEvents = (event) => {
+    this.setState(prevState => {
+      prevState.myEvents.splice(prevState.myEvents.indexOf(event), 1)
+      return {
+        myEvents: prevState.myEvents
+      }
+    }, this.setEvents)
+  }
+
+
+
+
+
+
+
+
+
+  /////////////////////////////
+
+  // addToMyEvents = (body) => {
+  //   this.setState({
+  //     myEvents: [...this.state.myEvents, body]
+  //   })
+  // }
 
   postAuth = (data) => {
     if (data.error) {
@@ -215,6 +268,7 @@ class App extends Component {
   }
 
  render() {
+   this.fetchMyEvents()
    let filteredEvents = this.state.events
 
    if (this.state.filterBy.today) {
@@ -255,6 +309,7 @@ class App extends Component {
                 selectDate={this.selectDate}
                 selectEvent={this.selectEvent}
                 selectMyEvent={this.selectMyEvent}
+                logOut={this.logOut}
                 />
 
                 <Map
