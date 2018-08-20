@@ -10,18 +10,27 @@ class SideEventDetails extends React.Component {
 
  render() {
    const regex = /(<([^>]+)>)/ig
-   const mapLink = this.props.selectedEvent.venue ?
-   `http://maps.google.com/?q=${this.props.selectedEvent.venue.address_1}+${this.props.selectedEvent.venue.city}` :
-   `http://maps.google.com/?q=${this.props.selectedEvent.group.localized_location}`
+
+   const getAddress = () => {
+     let address = ""
+     this.props.selectedEvent.venue ?
+     address = `${this.props.selectedEvent.venue.address_1} ${this.props.selectedEvent.venue.city}` :
+     address = this.props.selectedEvent.group.localized_location
+     return address
+   }
+
+   const mapLink = `http://maps.google.com/?q=${getAddress()}`
 
 
    let body = {name: this.props.selectedEvent.name,
                group_name: this.props.selectedEvent.group.name,
                description: this.props.selectedEvent.description,
-               date: this.props.selectedEvent.local_date,
-               time: this.props.selectedEvent.local_time,
-               venue_address: this.props.selectedEvent.venue_address,
-               meetup_id: this.props.selectedEvent.meetup_id}
+               local_date: this.props.selectedEvent.local_date,
+               local_time: this.props.selectedEvent.local_time,
+               address: getAddress(),
+               meetup_id: this.props.selectedEvent.meetup_id,
+               meetup_link: this.props.selectedEvent.link
+              }
 
 
    return (
@@ -39,15 +48,9 @@ class SideEventDetails extends React.Component {
               {this.props.selectedEvent.venue ? this.props.selectedEvent.venue.city : null}</a>
         </div>
        <p>{this.props.selectedEvent.description ? this.props.selectedEvent.description.replace(regex, " ") : ""}</p>
-       <button onClick={() => {this.addToMyEvents(body)}}>Add to My Events</button>
-     </div>
-   )
-   return (
-     <div id="mySidenav" class="sidenav">
        <button onClick={() => {this.props.addToMyEvents(body)}}>Add to My Events</button>
      </div>
    )
-
  }
 }
 
