@@ -1,4 +1,3 @@
-
 import React, { Component } from 'react';
 import './App.css'
 import { Route, Switch, Redirect, withRouter } from 'react-router-dom'
@@ -9,6 +8,9 @@ import MyEvents from './components/MyEvents'
 import SideEventDetails from './components/SideEventDetails'
 import {   createUser, loginUser, getCurrentUser, getUserEvents, setUserEvents } from './adapter/adapter'
 import AuthAction from './auth/AuthAction'
+import MySideEventDetails from './components/MySideEventDetails'
+
+
 
 
 
@@ -16,12 +18,20 @@ class App extends Component {
   state = {
     current_user: null,
     events:[],
-    myEvents: false,
+    myEvents: [],
     selectedEvent: false,
     filterBy:{
       today: false,
       tomorrow: false
-    }
+    },
+    selectedDate: false,
+    mySelectedEvent: false
+  }
+
+  addToMyEvents = (body) => {
+    this.setState({
+      myEvents: [...this.state.myEvents, body]
+    })
   }
 
   postAuth = (data) => {
@@ -84,6 +94,12 @@ class App extends Component {
     })
   }
 
+  selectMyEvent = (e) => {
+    this.setState({
+      mySelectedEvent: e
+    })
+  }
+
   sidebarOpen = () => {
     document.getElementById("mySidebar").style.display = "block";
   }
@@ -92,8 +108,8 @@ class App extends Component {
   document.getElementById("mySidebar").style.display = "none";
   }
 
-  addToMyEvents = (body) => {
-    console.log(this.state.myEvents);
+
+
   // fetch('http://localhost:3008/api/v1/events', {
   //   method: "POST",
   //   headers: {
@@ -102,7 +118,7 @@ class App extends Component {
   //   body: body
   // })
   // .then(r => console.log(r))
-  }
+
 
   getEventData = (e, topic, location) => {
     console.log(e)
@@ -120,22 +136,22 @@ class App extends Component {
     })
   }
 
-  renderMapOrMyEvents = (filteredEvents) => {
-    if (!this.state.myEvents) {
-      return (
-        <Map
-          selectEvent={this.selectEvent}
-          selectedEvent={this.state.selectedEvent}
-          events={filteredEvents}
-        />
-      )
-    }
-    else {
-      return (
-         <MyEvents/>
-      )
-    }
-  }
+  // renderMapOrMyEvents = (filteredEvents) => {
+  //   if (!this.state.myEvents) {
+  //     return (
+  //       <Map
+  //         selectEvent={this.selectEvent}
+  //         selectedEvent={this.state.selectedEvent}
+  //         events={filteredEvents}
+  //       />
+  //     )
+  //   }
+  //   else {
+  //     return (
+  //        <MyEvents/>
+  //     )
+  //   }
+  // }
 
   filterTdy = () => {
     let f = [];
@@ -158,6 +174,12 @@ class App extends Component {
     return f
   }
 
+  selectDate = (date) => {
+    this.setState({
+      selectedDate:date
+    })
+  }
+
   filterTmr = () => {
     let f = [];
     this.state.events.forEach((ev) => {
@@ -177,6 +199,19 @@ class App extends Component {
      f.push(x)
     })
     return f
+  }
+
+  destroyMyEvent = (e) => {
+    const myEventsCopy = [...this.state.myEvents]
+
+    let index = myEventsCopy.indexOf(e)
+      if (index > -1) {
+        myEventsCopy.splice(index, 1)
+      }
+    this.setState({
+      myEvents: myEventsCopy,
+      mySelectedEvent: false
+    })
   }
 
  render() {
@@ -211,13 +246,36 @@ class App extends Component {
               } > &#9776;
               </button>
               <Sidebar
-              getEventData={this.getEventData}
-              events={this.state.events}
-              filterEvents={this.filterEvents}
-              current_user={this.state.current_user}/>
+                current_user={this.state.current_user}
+                getEventData={this.getEventData}
+                events={this.state.events}
+                filterEvents={this.filterEvents}
+                myEvents={this.state.myEvents}
+                selectedDate={this.state.selectedDate}
+                selectDate={this.selectDate}
+                selectEvent={this.selectEvent}
+                selectMyEvent={this.selectMyEvent}
+                />
 
-              {this.renderMapOrMyEvents(filteredEvents)}
-              {this.state.selectedEvent ? <SideEventDetails selectedEvent={this.state.selectedEvent} selectEvent={this.selectEvent} addToMyEvents={this.addToMyEvents}/> : null }
+                <Map
+                  selectEvent={this.selectEvent}
+                  selectedEvent={this.state.selectedEvent}
+                  events={filteredEvents}
+                />
+                {this.state.selectedEvent ?
+                  <SideEventDetails
+                    addToMyEvents={this.addToMyEvents}
+                    selectedEvent={this.state.selectedEvent}
+                    selectEvent={this.selectEvent}/>
+                  : null
+                }
+                {this.state.mySelectedEvent ?
+                  <MySideEventDetails
+                    destroyMyEvent={this.destroyMyEvent}
+                    mySelectedEvent={this.state.mySelectedEvent}
+                    selectMyEvent={this.selectMyEvent}/>
+                  : null
+                }
               </React.Fragment>
             )
           }} />
@@ -233,7 +291,6 @@ class App extends Component {
            }} />
           <Redirect to="/404" />
         </Switch>
-
       </div>
     )
   }
