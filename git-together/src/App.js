@@ -22,7 +22,9 @@ class App extends Component {
     selectedEvent: false,
     filterBy:{
       today: false,
-      tomorrow: false
+      tomorrow: false,
+      dateFrom: false,
+      dateUntil:false
     },
     selectedDate: false,
     mySelectedEvent: false,
@@ -31,16 +33,16 @@ class App extends Component {
 /////////////////////////////
 
   fetchMyEvents = () => {
-    console.log("fetchMyEvents is run");
-    console.log(this.state.current_user)
-    if (this.state.current_user && this.state.current_user !== this.state.previouslySeenUser) {
-      getUserEvents(this.state.current_user.id, localStorage.getItem('token')).then(events => {
-        this.setState({
-          myEvents: events,
-          previouslySeenUser: this.state.current_user
-        })
-      })
-    }
+    // console.log("fetchMyEvents is run");
+    // console.log(this.state.current_user)
+    // if (this.state.current_user && this.state.current_user !== this.state.previouslySeenUser) {
+    //   getUserEvents(this.state.current_user.id, localStorage.getItem('token')).then(events => {
+    //     this.setState({
+    //       myEvents: events,
+    //       previouslySeenUser: this.state.current_user
+    //     })
+    //   })
+    // }
   }
 
   setEvents = () => {
@@ -54,17 +56,17 @@ class App extends Component {
   }
 
   addToMyEvents = (event) => {
-    console.log("addToMyEvent is run");
-    if (!this.state.myEvents.includes(event)) {
-      this.setState(prevState => {
-        return {
-          myEvents: [...prevState.myEvents, event]
-        }
-      }, this.setEvents)
+    // console.log("addToMyEvent is run");
+    // if (!this.state.myEvents.includes(event)) {
+    //   this.setState(prevState => {
+    //     return {
+    //       myEvents: [...prevState.myEvents, event]
+    //     }
+    //   }, this.setEvents)
     }
 
 
-  }
+
 
   destroyMyEvent = (event) => {
     console.log("destoryMyEvent is run");
@@ -137,6 +139,13 @@ class App extends Component {
     })
   }
 
+  filterEventsFromUntil = (e) => {
+    let newFilter = {...this.state.filterBy}
+    this.setState({
+      filterBy: {...this.state.filterBy, [e.target.name] : e.target.value}
+    })
+  }
+
   selectEvent = (e) => {
     this.setState({
       selectedEvent: e
@@ -205,16 +214,13 @@ class App extends Component {
   filterTdy = () => {
     let f = [];
     this.state.events.forEach((ev) => {
-      f.push()
       let x = ev.filter((e) => {
        var date = new Date();
        date.setDate(date.getDate());
        date.setHours(0,0,0,0)
-       console.log("tdy", date)
 
        let mydate=new Date(e.local_date);
        mydate.setHours(0,0,0,0)
-       console.log("thy", mydate)
 
        return mydate.getTime() === date.getTime()
      })
@@ -232,16 +238,13 @@ class App extends Component {
   filterTmr = () => {
     let f = [];
     this.state.events.forEach((ev) => {
-      f.push()
       let x = ev.filter((e) => {
        var date = new Date();
        date.setDate(date.getDate() + 1);
        date.setHours(0,0,0,0)
-       console.log("tmr", date)
        let mydate=new Date(e.local_date);
        mydate.setDate(mydate.getDate());
        mydate.setHours(0,0,0,0)
-       console.log("tmr", mydate)
 
        return mydate.getTime() === date.getTime()
      })
@@ -249,6 +252,43 @@ class App extends Component {
     })
     return f
   }
+
+  filterFrom = () => {
+    let f = [];
+    this.state.events.forEach((ev) => {
+      let x = ev.filter((e) => {
+       var date = new Date(this.state.filterBy.dateFrom);
+       date.setDate(date.getDate());
+       date.setHours(0,0,0,0)
+       let mydate=new Date(e.local_date);
+       mydate.setDate(mydate.getDate());
+       mydate.setHours(0,0,0,0)
+
+
+       return mydate.getTime() >= date.getTime()
+     })
+     f.push(x)
+    })
+    return f
+  }
+
+  filterUntil = () => {
+    let f = [];
+    this.state.events.forEach((ev) => {
+      let x = ev.filter((e) => {
+       var date = new Date(this.state.filterBy.dateUntil);
+       date.setDate(date.getDate());
+       date.setHours(0,0,0,0)
+       let mydate=new Date(e.local_date);
+       mydate.setDate(mydate.getDate());
+       mydate.setHours(0,0,0,0)
+       return mydate.getTime() <= date.getTime()
+     })
+     f.push(x)
+    })
+    return f
+  }
+
 
   destroyMyEvent = (e) => {
     const myEventsCopy = [...this.state.myEvents]
@@ -269,18 +309,26 @@ class App extends Component {
 
    if (this.state.filterBy.today) {
      filteredEvents = this.filterTdy()
-     console.log("Today", filteredEvents)
    }
 
    if (this.state.filterBy.tomorrow) {
      filteredEvents = this.filterTmr()
-     console.log("Tmr", filteredEvents)
-
    }
 
    if(this.state.filterBy.today && this.state.filterBy.tomorrow){
      filteredEvents = [...this.filterTdy(), ...this.filterTmr()]
-     console.log( console.log("TmrTdy", filteredEvents))
+   }
+
+   if (this.state.filterBy.dateFrom) {
+     filteredEvents = this.filterFrom()
+   }
+
+   if (this.state.filterBy.dateUntil) {
+     filteredEvents = this.filterUntil()
+   }
+
+   if (this.state.filterBy.dateFrom && this.state.filterBy.dateUntil) {
+    filteredEvents = [...this.filterUntil(), ...this.filterFrom()]
    }
 
     return (
@@ -306,6 +354,7 @@ class App extends Component {
                 selectEvent={this.selectEvent}
                 selectMyEvent={this.selectMyEvent}
                 logOut={this.logOut}
+                filterEventsFromUntil={this.filterEventsFromUntil}
                 />
 
                 <Map

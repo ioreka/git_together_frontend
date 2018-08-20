@@ -25,6 +25,24 @@ class Filter extends React.Component {
           }
         }/>
         </label>
+        <label htmlFor="dateFrom">From
+         <input
+          name="dateFrom"
+          type="date"
+          onChange={(e) => {
+            this.props.filterEventsFromUntil(e)
+          }
+        }/>
+        </label>
+        <label htmlFor="dateUntil">Until
+         <input
+          name="dateUntil"
+          type="date"
+          onChange={(e) => {
+            this.props.filterEventsFromUntil(e)
+          }
+        }/>
+        </label>
       </div>
     )
   }
