@@ -34,7 +34,7 @@ class SideEventDetails extends React.Component {
 
 
    return (
-     <div id="mySidenav" class="sidenav">
+     <div id="mySidenav" className="sidenav">
       <button className="closebtn" onClick={() => {this.props.selectEvent(false)}}><img style={{cursor:"pointer"}}src="./left-arrow.png"/></button>
        <a href={this.props.selectedEvent.link} target="_blank"><h4>{this.props.selectedEvent.name}</h4></a>
        <h5>Group: {this.props.selectedEvent.group.name}</h5>

@@ -14,7 +14,6 @@ class Sidebar extends React.Component {
   }
 
   onChange = (date) => {
-    console.log(date)
     this.setState({
       date
     },()=>{this.props.selectDate(date)})
@@ -33,15 +32,17 @@ class Sidebar extends React.Component {
 
      timeNodes.forEach((timeNode) => {
        let calendarTime = new Date(timeNode.dateTime)
-      if(this.props.myEvents.find((e) => {
-        let newTime = new Date(e.local_date)
-        newTime.setHours(0,0,0,0)
-        return calendarTime.getTime() === newTime.getTime()
-      }))
+       if (this.props.myEvents) {
+        if(this.props.myEvents.find((e) => {
+          let newTime = new Date(e.local_date)
+          newTime.setHours(0,0,0,0)
+          return calendarTime.getTime() === newTime.getTime()
+        }))
       {
-        console.log("WOOOOOWOWOWOWOWOWOWOWOWOW")
+        // console.log("WOOOOOWOWOWOWOWOWOWOWOWOW")
         timeNode.style.color = "green"
       }
+    }
     })
   }
 

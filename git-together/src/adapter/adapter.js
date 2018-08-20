@@ -1,4 +1,4 @@
-const urlBase = `http://localhost:3008/api/v1`
+const urlBase = `http://localhost:3000/api/v1`
 
 const createUser = (username, password) => {
   return fetch(`${urlBase}/users`, {
@@ -43,7 +43,6 @@ const getUserEvents = (id, token) => {
       Authorization: token
     }
   }).then(resp => resp.json())
-  .then(json => console.log(json))
 }
 
 const setUserEvents = (id, token, event_ids) => {

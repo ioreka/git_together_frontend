@@ -32,9 +32,10 @@ class App extends Component {
 
   fetchMyEvents = () => {
     console.log("fetchMyEvents is run");
-    console.log(this.state.current_user)
     if (this.state.current_user && this.state.current_user !== this.state.previouslySeenUser) {
-      getUserEvents(this.state.current_user.id, localStorage.getItem('token')).then(events => {
+      getUserEvents(this.state.current_user.id, localStorage.getItem('token'))
+      .then(events => {
+        // console.log(events);
         this.setState({
           myEvents: events,
           previouslySeenUser: this.state.current_user
@@ -45,6 +46,7 @@ class App extends Component {
 
   setEvents = () => {
     console.log("setEvents is run");
+    console.log("this.state.current_user:" + this.state.current_user);
     const event_ids = this.state.myEvents.map(ev => ev.id)
     setUserEvents(this.state.current_user.id, localStorage.getItem('token'), event_ids).then(new_events => {
       this.setState({
@@ -55,15 +57,19 @@ class App extends Component {
 
   addToMyEvents = (event) => {
     console.log("addToMyEvent is run");
-    if (!this.state.myEvents.includes(event)) {
-      this.setState(prevState => {
-        return {
-          myEvents: [...prevState.myEvents, event]
-        }
-      }, this.setEvents)
-    }
-
-
+    console.log("this.state:" + this.state);
+    console.log("this.state.myEvents:" + this.state.myEvents);
+    console.log("event:" + event);
+    console.log("event JSON'd:"+ JSON.stringify(event));
+    console.log("my events not include event?", !this.state.myEvents.includes(event))
+    // if (this.state.myEvents) {
+      if (!this.state.myEvents.includes(event)) {
+        this.setState({
+            myEvents: [...this.state.myEvents, event]
+        }, this.setEvents)
+      }
+    // }
+    console.log("this.state.myEvents:" + this.state.myEvents)
   }
 
   destroyMyEvent = (event) => {
@@ -175,10 +181,10 @@ class App extends Component {
     console.log(location)
 
     e.preventDefault()
-    fetch(`http://localhost:3008/api/v1/getevents?topic=${topic}&location=${location}`)
+    fetch(`http://localhost:3000/api/v1/getevents?topic=${topic}&location=${location}`)
     .then(r => r.json())
     .then(events => {
-      console.log(events)
+      // console.log(events)
       this.setState({
         events: events
       })
