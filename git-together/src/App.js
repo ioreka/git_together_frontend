@@ -31,6 +31,8 @@ class App extends Component {
 /////////////////////////////
 
   fetchMyEvents = () => {
+    console.log("fetchMyEvents is run");
+    console.log(this.state.current_user)
     if (this.state.current_user && this.state.current_user !== this.state.previouslySeenUser) {
       getUserEvents(this.state.current_user.id, localStorage.getItem('token')).then(events => {
         this.setState({
@@ -42,6 +44,7 @@ class App extends Component {
   }
 
   setEvents = () => {
+    console.log("setEvents is run");
     const event_ids = this.state.myEvents.map(ev => ev.id)
     setUserEvents(this.state.current_user.id, localStorage.getItem('token'), event_ids).then(new_events => {
       this.setState({
@@ -51,6 +54,7 @@ class App extends Component {
   }
 
   addToMyEvents = (event) => {
+    console.log("addToMyEvent is run");
     if (!this.state.myEvents.includes(event)) {
       this.setState(prevState => {
         return {
@@ -62,7 +66,8 @@ class App extends Component {
 
   }
 
-  removeFromMyEvents = (event) => {
+  destroyMyEvent = (event) => {
+    console.log("destoryMyEvent is run");
     this.setState(prevState => {
       prevState.myEvents.splice(prevState.myEvents.indexOf(event), 1)
       return {
@@ -75,17 +80,8 @@ class App extends Component {
 
 
 
-
-
-
-
   /////////////////////////////
 
-  // addToMyEvents = (body) => {
-  //   this.setState({
-  //     myEvents: [...this.state.myEvents, body]
-  //   })
-  // }
 
   postAuth = (data) => {
     if (data.error) {
@@ -115,12 +111,12 @@ class App extends Component {
 
   updateCurrentUser = (token) => {
     getCurrentUser(token).then(data => {
-      // console.log(data)
+       console.log(data)
       if (data.error) {
         this.logOut()
       } else {
         this.setState({
-          current_user: data.username
+          current_user: data
         })
       }
     })
