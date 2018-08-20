@@ -6,18 +6,28 @@ import Sidebar from './components/Sidebar'
 import Map from './components/Map'
 import MyEvents from './components/MyEvents'
 import SideEventDetails from './components/SideEventDetails'
+import MySideEventDetails from './components/MySideEventDetails'
+
 
 
 
 class App extends Component {
   state = {
     events:[],
-    myEvents: false,
+    myEvents: [],
     selectedEvent: false,
     filterBy:{
       today: false,
       tomorrow: false
-    }
+    },
+    selectedDate: false,
+    mySelectedEvent: false
+  }
+
+  addToMyEvents = (body) => {
+    this.setState({
+      myEvents: [...this.state.myEvents, body]
+    })
   }
 
   filterEvents = (e) => {
@@ -34,6 +44,12 @@ class App extends Component {
     })
   }
 
+  selectMyEvent = (e) => {
+    this.setState({
+      mySelectedEvent: e
+    })
+  }
+
   sidebarOpen = () => {
     document.getElementById("mySidebar").style.display = "block";
   }
@@ -41,10 +57,6 @@ class App extends Component {
   sidebarClose = () => {
   document.getElementById("mySidebar").style.display = "none";
 }
-
-addToMyEvents = (body) => {
-  console.log(this.state.myEvents);
-
 
   // fetch('http://localhost:3008/api/v1/events', {
   //   method: "POST",
@@ -54,7 +66,7 @@ addToMyEvents = (body) => {
   //   body: body
   // })
   // .then(r => console.log(r))
-}
+// }
 
   getEventData = (e, topic, location) => {
     console.log(e)
@@ -72,22 +84,22 @@ addToMyEvents = (body) => {
     })
   }
 
-  renderMapOrMyEvents = (filteredEvents) => {
-    if (!this.state.myEvents) {
-      return (
-        <Map
-          selectEvent={this.selectEvent}
-          selectedEvent={this.state.selectedEvent}
-          events={filteredEvents}
-        />
-      )
-    }
-    else {
-      return (
-         <MyEvents/>
-      )
-    }
-  }
+  // renderMapOrMyEvents = (filteredEvents) => {
+  //   if (!this.state.myEvents) {
+  //     return (
+  //       <Map
+  //         selectEvent={this.selectEvent}
+  //         selectedEvent={this.state.selectedEvent}
+  //         events={filteredEvents}
+  //       />
+  //     )
+  //   }
+  //   else {
+  //     return (
+  //        <MyEvents/>
+  //     )
+  //   }
+  // }
 
   filterTdy = () => {
     let f = [];
@@ -110,6 +122,12 @@ addToMyEvents = (body) => {
     return f
   }
 
+  selectDate = (date) => {
+    this.setState({
+      selectedDate:date
+    })
+  }
+
   filterTmr = () => {
     let f = [];
     this.state.events.forEach((ev) => {
@@ -129,6 +147,19 @@ addToMyEvents = (body) => {
      f.push(x)
     })
     return f
+  }
+
+  destroyMyEvent = (e) => {
+    const myEventsCopy = [...this.state.myEvents]
+
+    let index = myEventsCopy.indexOf(e)
+      if (index > -1) {
+        myEventsCopy.splice(index, 1)
+      }
+    this.setState({
+      myEvents: myEventsCopy,
+      mySelectedEvent: false
+    })
   }
 
  render() {
@@ -161,9 +192,34 @@ addToMyEvents = (body) => {
       <Sidebar
         getEventData={this.getEventData}
         events={this.state.events}
-        filterEvents={this.filterEvents}/>
-        {this.renderMapOrMyEvents(filteredEvents)}
-        {this.state.selectedEvent ? <SideEventDetails selectedEvent={this.state.selectedEvent} selectEvent={this.selectEvent} addToMyEvents={this.addToMyEvents}/> : null }
+        filterEvents={this.filterEvents}
+        myEvents={this.state.myEvents}
+        selectedDate={this.state.selectedDate}
+        selectDate={this.selectDate}
+        selectEvent={this.selectEvent}
+        selectMyEvent={this.selectMyEvent}
+        />
+
+        <Map
+          selectEvent={this.selectEvent}
+          selectedEvent={this.state.selectedEvent}
+          events={filteredEvents}
+        />
+        {this.state.selectedEvent ?
+          <SideEventDetails
+            addToMyEvents={this.addToMyEvents}
+            selectedEvent={this.state.selectedEvent}
+            selectEvent={this.selectEvent}/>
+          : null
+        }
+        {this.state.mySelectedEvent ?
+          <MySideEventDetails
+            destroyMyEvent={this.destroyMyEvent}
+            mySelectedEvent={this.state.mySelectedEvent}
+            selectMyEvent={this.selectMyEvent}/>
+          : null
+        }
+
       </div>
     )
   }
