@@ -43,9 +43,7 @@ class App extends Component {
 }
 
 addToMyEvents = (body) => {
-  this.setState({
-
-  })
+  console.log(this.state.myEvents);
 
 
   // fetch('http://localhost:3008/api/v1/events', {
@@ -64,7 +62,7 @@ addToMyEvents = (body) => {
     console.log(location)
 
     e.preventDefault()
-    fetch(`http://localhost:3008/api/v1/getevents?topic=${topic}&location=${location}`)
+    fetch(`http://localhost:3000/api/v1/getevents?topic=${topic}&location=${location}`)
     .then(r => r.json())
     .then(events => {
       console.log(events)
@@ -164,12 +162,17 @@ addToMyEvents = (body) => {
         getEventData={this.getEventData}
         events={this.state.events}
         filterEvents={this.filterEvents}/>
+<<<<<<< HEAD
         <Map
           selectEvent={this.selectEvent}
           selectedEvent={this.state.selectedEvent}
           events={filteredEvents}
         />
         {this.state.selectedEvent ? <SideEventDetails selectedEvent={this.state.selectedEvent} selectEvent={this.selectEvent}/> : null }
+=======
+        {this.renderMapOrMyEvents(filteredEvents)}
+        {this.state.selectedEvent ? <SideEventDetails selectedEvent={this.state.selectedEvent} selectEvent={this.selectEvent} addToMyEvents={this.addToMyEvents}/> : null }
+>>>>>>> b261ce1d9b72e9dd3fbf20a27d00ffe071b01788
       </div>
     )
   }

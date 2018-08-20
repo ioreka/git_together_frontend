@@ -39,7 +39,7 @@ class SideEventDetails extends React.Component {
               {this.props.selectedEvent.venue ? this.props.selectedEvent.venue.city : null}</a>
         </div>
        <p>{this.props.selectedEvent.description ? this.props.selectedEvent.description.replace(regex, " ") : ""}</p>
-       <button onClick={() => {this.addToMyEvents(body)}}>Add to My Events</button>
+       <button onClick={() => {this.props.addToMyEvents(body)}}>Add to My Events</button>
      </div>
    )
    return (
