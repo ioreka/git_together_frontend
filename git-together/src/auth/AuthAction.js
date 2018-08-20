@@ -16,7 +16,7 @@ class AuthAction extends React.Component {
     return (
     <React.Fragment>
     <h1>{this.props.header}</h1>
-      <form onSubmit={(e) => { 
+      <form onSubmit={(e) => {
         e.preventDefault()
         this.props.submit(this.state.username, this.state.password)
       }}>
