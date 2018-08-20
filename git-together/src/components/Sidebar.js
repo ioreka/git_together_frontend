@@ -3,7 +3,6 @@ import AuthBox from './AuthBox'
 import SearchContainer from './SearchContainer'
 import Filter from './Filter'
 import DateEvents from './DateEvents'
-
 import Calendar from 'react-calendar'
 import '../App.css'
 
@@ -52,8 +51,11 @@ class Sidebar extends React.Component {
     currentTime.setHours(0,0,0,0)
     currentTime =  currentTime.getTime()
     return (
-      <div id="sidebar" class="w3-sidebar w3-bar-block w3-dark-grey w3-animate-left" styles="display:none" id="mySidebar">
-        <AuthBox />
+      <div id="sidebar" className="w3-sidebar w3-bar-block w3-dark-grey w3-animate-left" styles="display:none" id="mySidebar">
+        <AuthBox
+          current_user={this.props.current_user}
+          logOut={this.props.logOut}
+        />
         <SearchContainer
           events={this.props.events}
           getEventData={this.props.getEventData}

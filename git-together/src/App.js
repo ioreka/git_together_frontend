@@ -1,17 +1,22 @@
 import React, { Component } from 'react';
 import './App.css'
-
+import { Route, Switch, Redirect, withRouter } from 'react-router-dom'
+import NotFound from './util/NotFound'
 import Sidebar from './components/Sidebar'
 import Map from './components/Map'
 import MyEvents from './components/MyEvents'
 import SideEventDetails from './components/SideEventDetails'
+import {   createUser, loginUser, getCurrentUser, getUserEvents, setUserEvents } from './adapter/adapter'
+import AuthAction from './auth/AuthAction'
 import MySideEventDetails from './components/MySideEventDetails'
+
 
 
 
 
 class App extends Component {
   state = {
+    current_user: null,
     events:[],
     myEvents: [],
     selectedEvent: false,
@@ -20,14 +25,113 @@ class App extends Component {
       tomorrow: false
     },
     selectedDate: false,
-    mySelectedEvent: false
+    mySelectedEvent: false,
+    previouslySeenUser: null
+  }
+/////////////////////////////
+
+  fetchMyEvents = () => {
+    if (this.state.current_user && this.state.current_user !== this.state.previouslySeenUser) {
+      getUserEvents(this.state.current_user.id, localStorage.getItem('token')).then(events => {
+        this.setState({
+          myEvents: events,
+          previouslySeenUser: this.state.current_user
+        })
+      })
+    }
   }
 
-  addToMyEvents = (body) => {
-    this.setState({
-      myEvents: [...this.state.myEvents, body]
+  setEvents = () => {
+    const event_ids = this.state.myEvents.map(ev => ev.id)
+    setUserEvents(this.state.current_user.id, localStorage.getItem('token'), event_ids).then(new_events => {
+      this.setState({
+        myEvents: new_events
+      })
     })
   }
+
+  addToMyEvents = (event) => {
+    if (!this.state.myEvents.includes(event)) {
+      this.setState(prevState => {
+        return {
+          myEvents: [...prevState.myEvents, event]
+        }
+      }, this.setEvents)
+    }
+
+
+  }
+
+  removeFromMyEvents = (event) => {
+    this.setState(prevState => {
+      prevState.myEvents.splice(prevState.myEvents.indexOf(event), 1)
+      return {
+        myEvents: prevState.myEvents
+      }
+    }, this.setEvents)
+  }
+
+
+
+
+
+
+
+
+
+  /////////////////////////////
+
+  // addToMyEvents = (body) => {
+  //   this.setState({
+  //     myEvents: [...this.state.myEvents, body]
+  //   })
+  // }
+
+  postAuth = (data) => {
+    if (data.error) {
+      alert(data.error)
+    } else {
+      this.props.history.push('/search')
+      localStorage.setItem('token', data.token)
+      this.updateCurrentUser(data.token)
+    }
+  }
+
+  signIn = (username, password) => {
+    createUser(username, password).then(this.postAuth)
+  }
+
+  login = (username, password) => {
+    loginUser(username, password).then(this.postAuth)
+  }
+
+  logOut = () => {
+    this.setState({
+      current_user: null
+    })
+    this.props.history.push('/login')
+    localStorage.clear()
+  }
+
+  updateCurrentUser = (token) => {
+    getCurrentUser(token).then(data => {
+      // console.log(data)
+      if (data.error) {
+        this.logOut()
+      } else {
+        this.setState({
+          current_user: data.username
+        })
+      }
+    })
+  }
+
+  componentDidMount() {
+    if (localStorage.getItem('token')) {
+      this.updateCurrentUser(localStorage.getItem('token'))
+    }
+  }
+
 
   filterEvents = (e) => {
     let bool = e.target.checked
@@ -55,7 +159,9 @@ class App extends Component {
 
   sidebarClose = () => {
   document.getElementById("mySidebar").style.display = "none";
-}
+  }
+
+
 
   // fetch('http://localhost:3008/api/v1/events', {
   //   method: "POST",
@@ -65,7 +171,7 @@ class App extends Component {
   //   body: body
   // })
   // .then(r => console.log(r))
-// }
+
 
   getEventData = (e, topic, location) => {
     console.log(e)
@@ -162,6 +268,7 @@ class App extends Component {
   }
 
  render() {
+   this.fetchMyEvents()
    let filteredEvents = this.state.events
 
    if (this.state.filterBy.today) {
@@ -182,46 +289,66 @@ class App extends Component {
 
     return (
       <div className="App">
-      <button class="w3-button w3-white w3-xxlarge" onClick={() => {
-        document.getElementById("mySidebar").style.display == "block"
-          ? this.sidebarClose()
-          : this.sidebarOpen() }
-        } > &#9776;
-      </button>
-      <Sidebar
-        getEventData={this.getEventData}
-        events={this.state.events}
-        filterEvents={this.filterEvents}
-        myEvents={this.state.myEvents}
-        selectedDate={this.state.selectedDate}
-        selectDate={this.selectDate}
-        selectEvent={this.selectEvent}
-        selectMyEvent={this.selectMyEvent}
-        />
+        <Switch>
+          <Route path="/search" render={() => {
+            return (
+              <React.Fragment>
+              <button className="w3-button w3-white w3-xxlarge" onClick={() => {
+                document.getElementById("mySidebar").style.display === "block"
+                ? this.sidebarClose()
+                : this.sidebarOpen() }
+              } > &#9776;
+              </button>
+              <Sidebar
+                current_user={this.state.current_user}
+                getEventData={this.getEventData}
+                events={this.state.events}
+                filterEvents={this.filterEvents}
+                myEvents={this.state.myEvents}
+                selectedDate={this.state.selectedDate}
+                selectDate={this.selectDate}
+                selectEvent={this.selectEvent}
+                selectMyEvent={this.selectMyEvent}
+                logOut={this.logOut}
+                />
 
-        <Map
-          selectEvent={this.selectEvent}
-          selectedEvent={this.state.selectedEvent}
-          events={filteredEvents}
-        />
-        {this.state.selectedEvent ?
-          <SideEventDetails
-            addToMyEvents={this.addToMyEvents}
-            selectedEvent={this.state.selectedEvent}
-            selectEvent={this.selectEvent}/>
-          : null
-        }
-        {this.state.mySelectedEvent ?
-          <MySideEventDetails
-            destroyMyEvent={this.destroyMyEvent}
-            mySelectedEvent={this.state.mySelectedEvent}
-            selectMyEvent={this.selectMyEvent}/>
-          : null
-        }
-
+                <Map
+                  selectEvent={this.selectEvent}
+                  selectedEvent={this.state.selectedEvent}
+                  events={filteredEvents}
+                />
+                {this.state.selectedEvent ?
+                  <SideEventDetails
+                    addToMyEvents={this.addToMyEvents}
+                    selectedEvent={this.state.selectedEvent}
+                    selectEvent={this.selectEvent}/>
+                  : null
+                }
+                {this.state.mySelectedEvent ?
+                  <MySideEventDetails
+                    destroyMyEvent={this.destroyMyEvent}
+                    mySelectedEvent={this.state.mySelectedEvent}
+                    selectMyEvent={this.selectMyEvent}/>
+                  : null
+                }
+              </React.Fragment>
+            )
+          }} />
+          <Route path="/signup" render={() => {
+            return (<AuthAction header="Sign up!" submit={this.signIn} />)
+          }} />
+          <Route path="/login" render={() => {
+            return (<AuthAction header="Log in!" submit={this.login} />)
+          }} />
+          <Route path="/404" component={NotFound} />
+          <Route path="/" render={() => {
+             return (<Redirect to="/search" />)
+           }} />
+          <Redirect to="/404" />
+        </Switch>
       </div>
     )
   }
 }
 
-export default App;
+export default withRouter(App);

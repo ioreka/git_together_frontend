@@ -1,24 +1,27 @@
 import React from 'react'
+import { Link } from 'react-router-dom'
+
 
 class AuthBox extends React.Component {
 
-//do switch routing for this
-//if this.props.currentUser
-//   render() {
-//     return (
-//       <div className="AuthBox">
-//         <label>Username:</label>
-//         <input type="text" name="username" onChange={this.props.handleUserInput}/>
-//         <label>Password:</label>
-//         <input type="text" name="password" onChange={this.props.handleUserInput}/>
-//         <button>Log in!</button>
-
   render () {
     return (
-      //Do conditional rendering either welcome message or log/sign buttons
       <div id="authbox">
-        <button>Sign up</button>
-        <button>Login</button>
+
+            { this.props.current_user?
+              //if current_user is true, renders a welcome message
+              <div>
+                Welcome, {this.props.current_user}!<br/>
+                <Link onClick={this.props.logOut} to="#">Log out</Link>
+              </div>
+              :
+              //if current_user is false, render the two links
+              <React.Fragment>
+                <Link to="/signup">Sign up</Link>
+                <Link to="/login">Login</Link>
+              </React.Fragment>
+            }
+
       </div>
     )
   }
