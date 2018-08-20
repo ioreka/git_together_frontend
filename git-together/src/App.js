@@ -162,17 +162,12 @@ addToMyEvents = (body) => {
         getEventData={this.getEventData}
         events={this.state.events}
         filterEvents={this.filterEvents}/>
-<<<<<<< HEAD
         <Map
           selectEvent={this.selectEvent}
           selectedEvent={this.state.selectedEvent}
           events={filteredEvents}
         />
         {this.state.selectedEvent ? <SideEventDetails selectedEvent={this.state.selectedEvent} selectEvent={this.selectEvent}/> : null }
-=======
-        {this.renderMapOrMyEvents(filteredEvents)}
-        {this.state.selectedEvent ? <SideEventDetails selectedEvent={this.state.selectedEvent} selectEvent={this.selectEvent} addToMyEvents={this.addToMyEvents}/> : null }
->>>>>>> b261ce1d9b72e9dd3fbf20a27d00ffe071b01788
       </div>
     )
   }
