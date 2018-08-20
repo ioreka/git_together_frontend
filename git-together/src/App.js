@@ -74,7 +74,7 @@ class App extends Component {
     console.log(location)
 
     e.preventDefault()
-    fetch(`http://localhost:3008/api/v1/getevents?topic=${topic}&location=${location}`)
+    fetch(`http://localhost:3000/api/v1/getevents?topic=${topic}&location=${location}`)
     .then(r => r.json())
     .then(events => {
       console.log(events)
@@ -219,6 +219,7 @@ class App extends Component {
             selectMyEvent={this.selectMyEvent}/>
           : null
         }
+
       </div>
     )
   }
