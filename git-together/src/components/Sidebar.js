@@ -2,7 +2,6 @@ import React from 'react'
 import AuthBox from './AuthBox'
 import SearchContainer from './SearchContainer'
 import Filter from './Filter'
-
 import Calendar from 'react-calendar'
 import '../App.css'
 

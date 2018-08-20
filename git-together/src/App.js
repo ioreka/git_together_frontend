@@ -7,7 +7,7 @@ import Sidebar from './components/Sidebar'
 import Map from './components/Map'
 import MyEvents from './components/MyEvents'
 import SideEventDetails from './components/SideEventDetails'
-import { createUser } from './adapter/adapter'
+import {   createUser, loginUser, getCurrentUser, getUserEvents, setUserEvents } from './adapter/adapter'
 import AuthAction from './auth/AuthAction'
 
 
@@ -23,6 +23,52 @@ class App extends Component {
       tomorrow: false
     }
   }
+
+  postAuth = (data) => {
+    if (data.error) {
+      alert(data.error)
+    } else {
+      this.props.history.push('/search')
+      localStorage.setItem('token', data.token)
+      this.updateCurrentUser(data.token)
+    }
+  }
+
+  signIn = (username, password) => {
+    createUser(username, password).then(this.postAuth)
+  }
+
+  login = (username, password) => {
+    loginUser(username, password).then(this.postAuth)
+  }
+
+  logOut = () => {
+    this.setState({
+      current_user: null
+    })
+    this.props.history.push('/login')
+    localStorage.clear()
+  }
+
+  updateCurrentUser = (token) => {
+    getCurrentUser(token).then(data => {
+      // console.log(data)
+      if (data.error) {
+        this.logOut()
+      } else {
+        this.setState({
+          current_user: data.username
+        })
+      }
+    })
+  }
+
+  componentDidMount() {
+    if (localStorage.getItem('token')) {
+      this.updateCurrentUser(localStorage.getItem('token'))
+    }
+  }
+
 
   filterEvents = (e) => {
     let bool = e.target.checked
@@ -44,12 +90,10 @@ class App extends Component {
 
   sidebarClose = () => {
   document.getElementById("mySidebar").style.display = "none";
-}
+  }
 
-addToMyEvents = (body) => {
-  console.log(this.state.myEvents);
-
-
+  addToMyEvents = (body) => {
+    console.log(this.state.myEvents);
   // fetch('http://localhost:3008/api/v1/events', {
   //   method: "POST",
   //   headers: {
@@ -58,7 +102,7 @@ addToMyEvents = (body) => {
   //   body: body
   // })
   // .then(r => console.log(r))
-}
+  }
 
   getEventData = (e, topic, location) => {
     console.log(e)
@@ -157,7 +201,7 @@ addToMyEvents = (body) => {
     return (
       <div className="App">
         <Switch>
-          <Route path="/" render={() => {
+          <Route path="/search" render={() => {
             return (
               <React.Fragment>
               <button className="w3-button w3-white w3-xxlarge" onClick={() => {
@@ -178,14 +222,15 @@ addToMyEvents = (body) => {
             )
           }} />
           <Route path="/signup" render={() => {
-            return (<AuthAction header="Sign up!"/>)
+            return (<AuthAction header="Sign up!" submit={this.signIn} />)
           }} />
           <Route path="/login" render={() => {
-            return(console.log('whaaaaaat'))
-            // return (<AuthAction header="Log in!"/>)
-
+            return (<AuthAction header="Log in!" submit={this.login} />)
           }} />
           <Route path="/404" component={NotFound} />
+          <Route path="/" render={() => {
+             return (<Redirect to="/search" />)
+           }} />
           <Redirect to="/404" />
         </Switch>
 
