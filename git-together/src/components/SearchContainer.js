@@ -9,6 +9,7 @@ class SearchContainer extends React.Component {
     return (
       <div>
         <SearchForm
+          setCenter={this.props.setCenter}
           getEventData={this.props.getEventData}/>
       </div>
     )

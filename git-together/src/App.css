@@ -59,7 +59,7 @@ input {
 }
 
 input {
-  padding-left: 7px;
+  display:block;
 }
 
 .sidenav a:hover {

@@ -27,7 +27,11 @@ class App extends Component {
     },
     selectedDate: false,
     mySelectedEvent: false,
-    previouslySeenUser: null
+    previouslySeenUser: null,
+    center: {
+      lat: 51.509865,
+      lng: 0.118092
+    }
   }
 /////////////////////////////
 
@@ -47,9 +51,8 @@ class App extends Component {
 
   setEvents = () => {
     console.log("setEvents is run");
-    console.log("this.state.current_user:" + this.state.current_user);
-    const event_ids = this.state.myEvents.map(ev => ev.id)
-    setUserEvents(this.state.current_user.id, localStorage.getItem('token'), event_ids).then(new_events => {
+    const events = this.state.myEvents
+    setUserEvents(this.state.current_user.id, localStorage.getItem('token'), this.state.myEvents).then(new_events => {
       this.setState({
         myEvents: new_events
       })
@@ -73,6 +76,7 @@ class App extends Component {
     // }
     console.log("this.state.myEvents:" + this.state.myEvents)
   }
+
 
   destroyMyEvent = (event) => {
     console.log("destoryMyEvent is run");
@@ -218,6 +222,17 @@ class App extends Component {
   //   }
   // }
 
+  setCenter = (address) => {
+    fetch(`https://maps.googleapis.com/maps/api/geocode/json?address=${address}&key=AIzaSyAhlNg9SyzsjkZk-9rTBDC8BthNPMbH-uc`)
+    .then(res => res.json())
+    .then(json => {
+      console.log(json)
+      this.setState({
+      center: {lat: json.results[0].geometry.location.lat, lng: json.results[0].geometry.location.lng }
+    })
+  })
+  }
+
   filterTdy = () => {
     let f = [];
     this.state.events.forEach((ev) => {
@@ -270,8 +285,9 @@ class App extends Component {
        let mydate=new Date(e.local_date);
        mydate.setDate(mydate.getDate());
        mydate.setHours(0,0,0,0)
-
-
+       console.log("date frm form", date)
+       console.log("date frm event", mydate)
+       console.log("event date is after selected date",mydate.getTime() >= date.getTime());
        return mydate.getTime() >= date.getTime()
      })
      f.push(x)
@@ -289,7 +305,35 @@ class App extends Component {
        let mydate=new Date(e.local_date);
        mydate.setDate(mydate.getDate());
        mydate.setHours(0,0,0,0)
+       console.log("date frm form", date)
+       console.log("date frm event", mydate)
+       console.log("event date is before selected date",mydate.getTime() <= date.getTime());
+
        return mydate.getTime() <= date.getTime()
+     })
+     f.push(x)
+    })
+    return f
+  }
+
+  filterByDatePickers = () => {
+    let f = [];
+    this.state.events.forEach((ev) => {
+      let x = ev.filter((e) => {
+        let dateFrom = new Date(this.state.filterBy.dateUntil);
+        let dateUntil = new Date(this.state.filterBy.dateUntil);
+        dateFrom.setDate(dateFrom.getDate());
+        dateFrom.setHours(0,0,0,0)
+        dateUntil.setDate(dateUntil.getDate());
+        dateUntil.setHours(0,0,0,0)
+       let mydate=new Date(e.local_date);
+       mydate.setDate(mydate.getDate());
+       mydate.setHours(0,0,0,0)
+       // console.log("date frm form", date)
+       // console.log("date frm event", mydate)
+       // console.log("event date is before selected date",mydate.getTime() <= date.getTime());
+
+       return mydate.getTime() >= dateFrom.getTime() && mydate.getTime() <= dateUntil.getTime()
      })
      f.push(x)
     })
@@ -335,7 +379,7 @@ class App extends Component {
    }
 
    if (this.state.filterBy.dateFrom && this.state.filterBy.dateUntil) {
-    filteredEvents = [...this.filterUntil(), ...this.filterFrom()]
+    filteredEvents = this.filterByDatePickers()
    }
 
     return (
@@ -351,6 +395,7 @@ class App extends Component {
               } > &#9776;
               </button>
               <Sidebar
+                setCenter={this.setCenter}
                 current_user={this.state.current_user}
                 getEventData={this.getEventData}
                 events={this.state.events}
@@ -365,6 +410,7 @@ class App extends Component {
                 />
 
                 <Map
+                  center={this.state.center}
                   selectEvent={this.selectEvent}
                   selectedEvent={this.state.selectedEvent}
                   events={filteredEvents}
