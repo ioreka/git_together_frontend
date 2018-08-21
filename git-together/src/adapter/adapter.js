@@ -45,7 +45,7 @@ const getUserEvents = (id, token) => {
   }).then(resp => resp.json())
 }
 
-const setUserEvents = (id, token, event_ids) => {
+const setUserEvents = (id, token, events) => {
   return fetch(`${urlBase}/users/${id}/events`, {
     headers: {
       'Content-Type': 'application/json',
@@ -53,7 +53,7 @@ const setUserEvents = (id, token, event_ids) => {
     },
     method: 'POST',
     body: JSON.stringify({
-      event_ids
+      events
     })
   }).then(resp => resp.json())
 }

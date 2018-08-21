@@ -28,7 +28,10 @@ class SearchForm extends React.Component {
         </p>
 
         <p>
-        <button onClick={(e) => {this.props.getEventData(e,this.state.topic, this.state.location)}}>Seach for events!</button>
+        <button onClick={(e) => {
+          this.props.getEventData(e,this.state.topic, this.state.location)
+          this.props.setCenter(this.state.location)
+        }}>Seach for events!</button>
         </p>
       </div>
     )

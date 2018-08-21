@@ -4,14 +4,9 @@ import Pin from './Pin'
 
 class Map extends React.Component {
 
-  static defaultProps = {
-    center: {
-      lat: 51.509865,
-      lng: 0.118092
-    },
-    zoom: 11
+  state = {
+    zoom: 13
   }
-
 
   render() {
     let pins = []
@@ -39,7 +34,8 @@ class Map extends React.Component {
             <GoogleMapReact
               bootstrapURLKeys={{ key: "AIzaSyAhlNg9SyzsjkZk-9rTBDC8BthNPMbH-uc"}}
               defaultCenter={this.props.center}
-              defaultZoom={this.props.zoom}
+              center={this.props.center}
+              defaultZoom={this.state.zoom}
             >
               {pins}
             </GoogleMapReact>
