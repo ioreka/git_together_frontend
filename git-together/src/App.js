@@ -4,7 +4,6 @@ import { Route, Switch, Redirect, withRouter } from 'react-router-dom'
 import NotFound from './util/NotFound'
 import Sidebar from './components/Sidebar'
 import Map from './components/Map'
-import MyEvents from './components/MyEvents'
 import SideEventDetails from './components/SideEventDetails'
 import {   createUser, loginUser, getCurrentUser, getUserEvents, setUserEvents } from './adapter/adapter'
 import AuthAction from './auth/AuthAction'
@@ -37,16 +36,17 @@ class App extends Component {
 /////////////////////////////
 
   fetchMyEvents = () => {
-    // console.log("fetchMyEvents is run");
-    // console.log(this.state.current_user)
-    // if (this.state.current_user && this.state.current_user !== this.state.previouslySeenUser) {
-    //   getUserEvents(this.state.current_user.id, localStorage.getItem('token')).then(events => {
-    //     this.setState({
-    //       myEvents: events,
-    //       previouslySeenUser: this.state.current_user
-    //     })
-    //   })
-    // }
+    console.log("fetchMyEvents is run");
+    if (this.state.current_user && this.state.current_user !== this.state.previouslySeenUser) {
+      getUserEvents(this.state.current_user.id, localStorage.getItem('token'))
+      .then(events => {
+        // console.log(events);
+        this.setState({
+          myEvents: events,
+          previouslySeenUser: this.state.current_user
+        })
+      })
+    }
   }
 
   setEvents = () => {
@@ -61,16 +61,21 @@ class App extends Component {
 
   addToMyEvents = (event) => {
     console.log("addToMyEvent is run");
-    if (!this.state.myEvents.includes(event)) {
-      this.setState(prevState => {
-        return {
-          myEvents: [...prevState.myEvents, event]
-        }
-      }, this.setEvents)
-    }
+    console.log("this.state:" + this.state);
+    console.log("this.state.myEvents:" + this.state.myEvents);
+    console.log("event:" + event);
+    console.log("event JSON'd:"+ JSON.stringify(event));
+    console.log("my events not include event?", !this.state.myEvents.includes(event))
+    // if (this.state.myEvents) {
+      if (!this.state.myEvents.includes(event)) {
+        this.setState({
+            myEvents: [...this.state.myEvents, event]
+        }, this.setEvents)
+      }
+      }
+    // }
+    console.log("this.state.myEvents:" + this.state.myEvents)
   }
-
-
 
 
   destroyMyEvent = (event) => {
@@ -137,8 +142,9 @@ class App extends Component {
 
 
   filterEvents = (e) => {
-    let bool = e.target.checked
-    let newFilter = {...this.state.filterBy}
+    //commented the following two lines out as they are assigned but never used
+    // let bool = e.target.checked
+    // let newFilter = {...this.state.filterBy}
     this.setState({
       filterBy: {...this.state.filterBy, [e.target.name] : e.target.checked}
     })
@@ -189,10 +195,10 @@ class App extends Component {
     console.log(location)
 
     e.preventDefault()
-    fetch(`http://localhost:3008/api/v1/getevents?topic=${topic}&location=${location}`)
+    fetch(`http://localhost:3000/api/v1/getevents?topic=${topic}&location=${location}`)
     .then(r => r.json())
     .then(events => {
-      console.log(events)
+      // console.log(events)
       this.setState({
         events: events
       })
