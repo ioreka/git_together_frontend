@@ -14,7 +14,6 @@ class Sidebar extends React.Component {
   }
 
   onChange = (date) => {
-    console.log(date)
     this.setState({
       date
     },()=>{this.props.selectDate(date)})
@@ -33,15 +32,17 @@ class Sidebar extends React.Component {
 
      timeNodes.forEach((timeNode) => {
        let calendarTime = new Date(timeNode.dateTime)
-      if(this.props.myEvents.find((e) => {
-        let newTime = new Date(e.local_date)
-        newTime.setHours(0,0,0,0)
-        return calendarTime.getTime() === newTime.getTime()
-      }))
+       if (this.props.myEvents) {
+        if(this.props.myEvents.find((e) => {
+          let newTime = new Date(e.local_date)
+          newTime.setHours(0,0,0,0)
+          return calendarTime.getTime() === newTime.getTime()
+        }))
       {
         timeNode.style.color = "white"
         timeNode.style.background = "purple"
       }
+    }
     })
   }
 
@@ -51,7 +52,7 @@ class Sidebar extends React.Component {
     currentTime.setHours(0,0,0,0)
     currentTime =  currentTime.getTime()
     return (
-      <div id="sidebar" className="w3-sidebar w3-bar-block w3-dark-grey w3-animate-left" styles="display:none" id="mySidebar">
+      <div className="w3-sidebar w3-bar-block w3-dark-grey w3-animate-left" styles="display:none" id="mySidebar">
         <AuthBox
           current_user={this.props.current_user}
           logOut={this.props.logOut}
@@ -63,8 +64,9 @@ class Sidebar extends React.Component {
         <Filter
           filterEventsFromUntil={this.props.filterEventsFromUntil}
           filterEvents={this.props.filterEvents}/>
+
         My events:
-        <Calendar style={this.state.date.getTime() == currentTime ? {color:"green"} : null }
+        <Calendar style={this.state.date.getTime() === currentTime ? {color:"green"} : null }
           onChange={this.onChange}
           onActiveDateChange={this.displayMyEvents}
           value={this.state.date}

@@ -6,23 +6,28 @@ class Filter extends React.Component {
   render() {
     return (
       <div>
-        <label htmlFor="today">Today
-           <input
-            name="today"
-            type="checkbox"
-            onChange={(e) => {
-              this.props.filterEvents(e)
-            }
+        <p>
+          <input
+          name="today"
+          type="checkbox"
+          onChange={(e) => {
+            this.props.filterEvents(e)
+          }
           }/>
-        </label>
+          <label htmlFor="today">Today</label>
+        </p>
 
-        <label htmlFor="tomorrow">Tomorrow
-         <input
+        <p>
+          <input
           name="tomorrow"
           type="checkbox"
           onChange={(e) => {
             this.props.filterEvents(e)
           }
+          }/>
+
+          <label htmlFor="tomorrow">Tomorrow</label>
+        </p>
         }/>
         </label>
         <label htmlFor="dateFrom">From

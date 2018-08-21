@@ -8,7 +8,8 @@ class Pin extends React.Component {
       <img
         style={{cursor: "pointer"}}
         onClick={() => this.props.selectEvent(this.props.ev)}
-        src="/maps-and-flags-32.png"/>
+        src="/maps-and-flags-32.png"
+        alt=""/>
     )
   }
 }

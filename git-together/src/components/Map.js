@@ -17,16 +17,17 @@ class Map extends React.Component {
     let pins = []
     if (this.props.events.length > 0){
       this.props.events.forEach((e) => {
-        console.log(e)
+        // console.log(e)
         e.map((ev) => {
-          console.log("ev",ev)
+          // console.log("ev",ev)
           pins.push(<Pin
             selectedEvent={this.props.selectedEvent}
             selectEvent={this.props.selectEvent}
             ev={ev}
             lat={ev.venue ? ev.venue.lat : ev.group.lat}
             lng={ev.venue ? ev.venue.lon : ev.group.lon}
-            name={ev.name}/>)
+            name={ev.name}
+            key={ev.name}/>)
         })
       })
     }
