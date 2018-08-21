@@ -54,6 +54,14 @@ input {
     transition: 0.3s;
 }
 
+.w3-container {
+  padding: 0;
+}
+
+input {
+  padding-left: 7px;
+}
+
 .sidenav a:hover {
     color: #333;
 }

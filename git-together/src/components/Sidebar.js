@@ -39,8 +39,8 @@ class Sidebar extends React.Component {
           return calendarTime.getTime() === newTime.getTime()
         }))
       {
-        // console.log("WOOOOOWOWOWOWOWOWOWOWOWOW")
-        timeNode.style.color = "green"
+        timeNode.style.color = "white"
+        timeNode.style.background = "purple"
       }
     }
     })
@@ -62,6 +62,7 @@ class Sidebar extends React.Component {
           getEventData={this.props.getEventData}
         />
         <Filter
+          filterEventsFromUntil={this.props.filterEventsFromUntil}
           filterEvents={this.props.filterEvents}/>
 
         My events:
