@@ -16,6 +16,7 @@ class SideEventDetails extends React.Component {
      this.props.selectedEvent.venue ?
      address = `${this.props.selectedEvent.venue.address_1} ${this.props.selectedEvent.venue.city}` :
      address = this.props.selectedEvent.group.localized_location
+     console.log("selectedevent:", this.props.selectedEvent);
      return address
    }
 
@@ -28,7 +29,7 @@ class SideEventDetails extends React.Component {
                local_date: this.props.selectedEvent.local_date,
                local_time: this.props.selectedEvent.local_time,
                address: getAddress(),
-               meetup_id: this.props.selectedEvent.meetup_id,
+               meetup_id: this.props.selectedEvent.id,
                meetup_link: this.props.selectedEvent.link
               }
 

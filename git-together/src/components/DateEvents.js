@@ -1,6 +1,7 @@
 import React from 'react'
 
 const filterEvents = (selectMyEvent, selectedDate, myEvents) => {
+
   if (myEvents) {
     let events = myEvents.filter((ev) => {
       let nD = new Date(ev.local_date)
@@ -8,9 +9,6 @@ const filterEvents = (selectMyEvent, selectedDate, myEvents) => {
 
       let sD = new Date(selectedDate)
       sD.setHours(0,0,0,0)
-      console.log("bool", nD.getTime() === sD.getTime())
-      console.log("nD",nD.getTime());
-      console.log("sD",sD.getTime());
 
       return nD.getTime() === sD.getTime()
     }).map((e) => {

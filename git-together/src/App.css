@@ -58,9 +58,9 @@ input {
   padding: 0;
 }
 
-input {
+/* input {
   display:block;
-}
+} */
 
 .sidenav a:hover {
     color: #333;

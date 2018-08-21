@@ -4,7 +4,7 @@ class MySideEventDetails extends React.Component {
 
   componentDidMount () {
     this.props.mySelectedEvent
-      ? document.getElementById("mySidenav").style.width = "250px"
+      ? document.getElementById("mySidenav").style.width = "550px"
       : document.getElementById("mySidenav").style.width = "0"
   }
 
@@ -28,7 +28,12 @@ class MySideEventDetails extends React.Component {
           </a>
         </div>
        <p>{this.props.mySelectedEvent.description ? this.props.mySelectedEvent.description.replace(regex, " ") : ""}</p>
-       <button onClick={() => {this.props.destroyMyEvent(this.props.mySelectedEvent)}}>Remove</button>
+       <button onClick={() => {
+         console.log("button is hit!")
+         console.log("this.props:", this.props);
+         console.log("this.props.destroyMyEvent:", this.props.destroyMyEvent);
+         console.log("this.props.mySelectedEvent:", this.props.mySelectedEvent);
+         this.props.destroyMyEvent(this.props.mySelectedEvent)}}>Remove</button>
      </div>
    )
  }

@@ -5,7 +5,7 @@ import NotFound from './util/NotFound'
 import Sidebar from './components/Sidebar'
 import Map from './components/Map'
 import SideEventDetails from './components/SideEventDetails'
-import {   createUser, loginUser, getCurrentUser, getUserEvents, setUserEvents } from './adapter/adapter'
+import {   createUser, loginUser, getCurrentUser, getUserEvents, setUserEvents, deleteFromMyEventsList } from './adapter/adapter'
 import AuthAction from './auth/AuthAction'
 import MySideEventDetails from './components/MySideEventDetails'
 
@@ -36,7 +36,6 @@ class App extends Component {
 /////////////////////////////
 
   fetchMyEvents = () => {
-    console.log("fetchMyEvents is run");
     if (this.state.current_user && this.state.current_user !== this.state.previouslySeenUser) {
       getUserEvents(this.state.current_user.id, localStorage.getItem('token'))
       .then(events => {
@@ -50,8 +49,6 @@ class App extends Component {
   }
 
   setEvents = () => {
-    console.log("setEvents is run");
-    const events = this.state.myEvents
     setUserEvents(this.state.current_user.id, localStorage.getItem('token'), this.state.myEvents).then(new_events => {
       this.setState({
         myEvents: new_events
@@ -59,33 +56,34 @@ class App extends Component {
     })
   }
 
+
+  deleteAndSetMyEvents = (event) => {
+    console.log("deleteAndSetMyEvents is run");
+    deleteFromMyEventsList(this.state.current_user.id, localStorage.getItem('token'), event).then(new_events => {
+      this.setState({
+        myEvents: new_events
+      })
+    })
+  }
+
+
   addToMyEvents = (event) => {
-    console.log("addToMyEvent is run");
-    console.log("this.state:" + this.state);
-    console.log("this.state.myEvents:" + this.state.myEvents);
-    console.log("event:" + event);
-    console.log("event JSON'd:"+ JSON.stringify(event));
-    console.log("my events not include event?", !this.state.myEvents.includes(event))
-    // if (this.state.myEvents) {
       if (!this.state.myEvents.includes(event)) {
         this.setState({
             myEvents: [...this.state.myEvents, event]
         }, this.setEvents)
       }
-      }
-    // }
-    console.log("this.state.myEvents:" + this.state.myEvents)
-  }
+    }
 
 
   destroyMyEvent = (event) => {
-    console.log("destoryMyEvent is run");
+    console.log("destroyMyEvent is run");
     this.setState(prevState => {
       prevState.myEvents.splice(prevState.myEvents.indexOf(event), 1)
       return {
         myEvents: prevState.myEvents
       }
-    }, this.setEvents)
+    }, () => this.deleteAndSetMyEvents(event))
   }
 
 
@@ -123,7 +121,6 @@ class App extends Component {
 
   updateCurrentUser = (token) => {
     getCurrentUser(token).then(data => {
-       console.log(data)
       if (data.error) {
         this.logOut()
       } else {
@@ -341,18 +338,18 @@ class App extends Component {
   }
 
 
-  destroyMyEvent = (e) => {
-    const myEventsCopy = [...this.state.myEvents]
-
-    let index = myEventsCopy.indexOf(e)
-      if (index > -1) {
-        myEventsCopy.splice(index, 1)
-      }
-    this.setState({
-      myEvents: myEventsCopy,
-      mySelectedEvent: false
-    })
-  }
+  // destroyMyEvent = (e) => {
+  //   const myEventsCopy = [...this.state.myEvents]
+  //
+  //   let index = myEventsCopy.indexOf(e)
+  //     if (index > -1) {
+  //       myEventsCopy.splice(index, 1)
+  //     }
+  //   this.setState({
+  //     myEvents: myEventsCopy,
+  //     mySelectedEvent: false
+  //   })
+  // }
 
  render() {
    this.fetchMyEvents()
