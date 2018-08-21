@@ -4,7 +4,7 @@ class SideEventDetails extends React.Component {
 
   componentDidMount () {
     this.props.selectedEvent
-      ? document.getElementById("mySidenav").style.width = "250px"
+      ? document.getElementById("mySidenav").style.width = "550px"
       : document.getElementById("mySidenav").style.width = "0"
   }
 
@@ -35,7 +35,7 @@ class SideEventDetails extends React.Component {
 
    return (
      <div id="mySidenav" className="sidenav">
-      <button className="closebtn" onClick={() => {this.props.selectEvent(false)}}><img style={{cursor:"pointer"}}src="./left-arrow.png"/></button>
+      <button className="closebtn" onClick={() => {this.props.selectEvent(false)}}><img style={{cursor:"pointer"}}src="./left-arrow.png" alt=""/></button>
        <a href={this.props.selectedEvent.link} target="_blank"><h4>{this.props.selectedEvent.name}</h4></a>
        <h5>Group: {this.props.selectedEvent.group.name}</h5>
         <div>
@@ -43,12 +43,12 @@ class SideEventDetails extends React.Component {
           <a
             href={mapLink}
             target="_blank">
-            <img src="./Maps-icon-16.png"/>
+            <img src="./Maps-icon-16.png" alt=""/>
               {this.props.selectedEvent.venue ? this.props.selectedEvent.venue.address_1 : this.props.selectedEvent.group.localized_location}
               {this.props.selectedEvent.venue ? this.props.selectedEvent.venue.city : null}</a>
         </div>
        <p>{this.props.selectedEvent.description ? this.props.selectedEvent.description.replace(regex, " ") : ""}</p>
-       <button onClick={() => {this.props.addToMyEvents(body)}}>Add to My Events</button>
+       <button id="addOrRemoveButton" onClick={() => {this.props.addToMyEvents(body)}}>Add to My Events</button>
      </div>
    )
  }

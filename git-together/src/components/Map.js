@@ -26,7 +26,8 @@ class Map extends React.Component {
             ev={ev}
             lat={ev.venue ? ev.venue.lat : ev.group.lat}
             lng={ev.venue ? ev.venue.lon : ev.group.lon}
-            name={ev.name}/>)
+            name={ev.name}
+            key={ev.name}/>)
         })
       })
     }

@@ -4,7 +4,6 @@ import { Route, Switch, Redirect, withRouter } from 'react-router-dom'
 import NotFound from './util/NotFound'
 import Sidebar from './components/Sidebar'
 import Map from './components/Map'
-import MyEvents from './components/MyEvents'
 import SideEventDetails from './components/SideEventDetails'
 import {   createUser, loginUser, getCurrentUser, getUserEvents, setUserEvents } from './adapter/adapter'
 import AuthAction from './auth/AuthAction'
@@ -67,6 +66,9 @@ class App extends Component {
         this.setState({
             myEvents: [...this.state.myEvents, event]
         }, this.setEvents)
+      } else {
+        document.getElementById("addOrRemoveButton").innerText = "Remove from My Events"
+        //maybe re-render? or back to search?
       }
     // }
     console.log("this.state.myEvents:" + this.state.myEvents)
@@ -136,8 +138,9 @@ class App extends Component {
 
 
   filterEvents = (e) => {
-    let bool = e.target.checked
-    let newFilter = {...this.state.filterBy}
+    //commented the following two lines out as they are assigned but never used
+    // let bool = e.target.checked
+    // let newFilter = {...this.state.filterBy}
     this.setState({
       filterBy: {...this.state.filterBy, [e.target.name] : e.target.checked}
     })
