@@ -5,8 +5,8 @@ class Filter extends React.Component {
 
   render() {
     return (
-      <div>
-        <p>
+      <React.Fragment>
+        <div class="inline-field">
           <input
           name="today"
           type="checkbox"
@@ -14,10 +14,11 @@ class Filter extends React.Component {
             this.props.filterEvents(e)
           }
           }/>
-          <label htmlFor="today">Today</label>
-        </p>
+          &ensp;
+          <span>Today</span>
+        </div>
 
-        <p>
+        <div class="inline-field">
           <input
           name="tomorrow"
           type="checkbox"
@@ -25,11 +26,10 @@ class Filter extends React.Component {
             this.props.filterEvents(e)
           }
           }/>
-
-          <label htmlFor="tomorrow">Tomorrow</label>
-        </p>
-        }/>
-        </label>
+          &ensp;
+          <span>Tomorrow</span>
+        </div>
+      
         <label htmlFor="dateFrom">From
          <input
           name="dateFrom"
@@ -39,6 +39,7 @@ class Filter extends React.Component {
           }
         }/>
         </label>
+
         <label htmlFor="dateUntil">Until
          <input
           name="dateUntil"
@@ -48,7 +49,8 @@ class Filter extends React.Component {
           }
         }/>
         </label>
-      </div>
+      </React.Fragment>
+     
     )
   }
 }
