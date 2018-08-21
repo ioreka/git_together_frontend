@@ -57,6 +57,7 @@ class Sidebar extends React.Component {
           logOut={this.props.logOut}
         />
         <SearchContainer
+          setCenter={this.props.setCenter}
           events={this.props.events}
           getEventData={this.props.getEventData}
         />
