@@ -1,6 +1,6 @@
 import React from 'react'
 
-const filterEvents = (selectMyEvent, selectedDate, myEvents) => {
+const filterEvents = ( selectMyEvent, selectedDate, myEvents) => {
 
   if (myEvents) {
     let events = myEvents.filter((ev) => {

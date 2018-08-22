@@ -1,4 +1,4 @@
-const urlBase = `http://localhost:3000/api/v1`
+const urlBase = `http://localhost:3008/api/v1`
 
 const createUser = (username, password) => {
   return fetch(`${urlBase}/users`, {
@@ -33,6 +33,30 @@ const getCurrentUser = (token) => {
       'Content-Type': 'application/json',
       Authorization: token
     },
+  }).then(resp => resp.json())
+}
+
+
+const getEventComments = (id, token, meetup_id) => {
+  return fetch(`${urlBase}/comments?meetup_id=${meetup_id}`, {
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: token
+    },
+    body: meetup_id
+  }).then(resp => resp.json())
+}
+
+const setEventComment = (id, token, comment) => {
+  return fetch(`${urlBase}/comments`, {
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: token
+    },
+    method: 'POST',
+    body: JSON.stringify({
+      comment
+    })
   }).then(resp => resp.json())
 }
 
@@ -80,7 +104,9 @@ export {
   getCurrentUser,
   getUserEvents,
   setUserEvents,
-  deleteFromMyEventsList
+  deleteFromMyEventsList,
+  setEventComment,
+  getEventComments
 }
 
 

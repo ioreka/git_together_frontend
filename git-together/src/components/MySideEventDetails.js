@@ -1,4 +1,7 @@
 import React from "react"
+import Comments from './Comments'
+import CommentForm from './CommentForm'
+
 
 class MySideEventDetails extends React.Component {
 
@@ -10,7 +13,6 @@ class MySideEventDetails extends React.Component {
 
  render() {
    const regex = /(<([^>]+)>)/ig
-
    const mapLink = `http://maps.google.com/?q=${this.props.mySelectedEvent.address}`
 
    return (
@@ -28,11 +30,14 @@ class MySideEventDetails extends React.Component {
           </a>
         </div>
        <p>{this.props.mySelectedEvent.description ? this.props.mySelectedEvent.description.replace(regex, " ") : ""}</p>
+       <CommentForm
+        ev={this.props.mySelectedEvent}
+        current_user={this.props.current_user}
+        addComment={this.props.addComment}/>
+       <Comments
+        comments={this.props.comments}
+        ev={this.props.mySelectedEvent}/>
        <button onClick={() => {
-         console.log("button is hit!")
-         console.log("this.props:", this.props);
-         console.log("this.props.destroyMyEvent:", this.props.destroyMyEvent);
-         console.log("this.props.mySelectedEvent:", this.props.mySelectedEvent);
          this.props.destroyMyEvent(this.props.mySelectedEvent)}}>Remove</button>
      </div>
    )

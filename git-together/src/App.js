@@ -5,9 +5,10 @@ import NotFound from './util/NotFound'
 import Sidebar from './components/Sidebar'
 import Map from './components/Map'
 import SideEventDetails from './components/SideEventDetails'
-import {   createUser, loginUser, getCurrentUser, getUserEvents, setUserEvents, deleteFromMyEventsList } from './adapter/adapter'
+import {   setEventComment, getEventComments, createUser, loginUser, getCurrentUser, getUserEvents, setUserEvents, deleteFromMyEventsList } from './adapter/adapter'
 import AuthAction from './auth/AuthAction'
 import MySideEventDetails from './components/MySideEventDetails'
+
 
 
 
@@ -31,15 +32,28 @@ class App extends Component {
     center: {
       lat: 51.509865,
       lng: 0.118092
-    }
+    },
+    comments:[]
   }
 /////////////////////////////
+
+setComments = (comment) => {
+  setEventComment(this.state.current_user.id, localStorage.getItem('token'), comment)
+  .then(new_comment => {
+    this.setState({
+      comments: [...this.state.comments, new_comment]
+    })
+  })
+}
+
+  addComment=(comment) => {
+    this.setComments(comment)
+  }
 
   fetchMyEvents = () => {
     if (this.state.current_user && this.state.current_user !== this.state.previouslySeenUser) {
       getUserEvents(this.state.current_user.id, localStorage.getItem('token'))
       .then(events => {
-        // console.log(events);
         this.setState({
           myEvents: events,
           previouslySeenUser: this.state.current_user
@@ -71,7 +85,16 @@ class App extends Component {
       if (!this.state.myEvents.includes(event)) {
         this.setState({
             myEvents: [...this.state.myEvents, event]
-        }, this.setEvents)
+        },() => {
+          this.setEvents()
+          this.setState({
+            selectedEvent: null
+          })
+          alert("Event added to calendar")
+        })
+      }
+      else {
+        alert("This event is already in your calendar")
       }
     }
 
@@ -83,7 +106,13 @@ class App extends Component {
       return {
         myEvents: prevState.myEvents
       }
-    }, () => this.deleteAndSetMyEvents(event))
+    }, () => {
+      this.deleteAndSetMyEvents(event)
+      this.setState({
+        selectedEvent: null
+      })
+      alert("Event removed from calendar")
+    })
   }
 
 
@@ -139,9 +168,6 @@ class App extends Component {
 
 
   filterEvents = (e) => {
-    //commented the following two lines out as they are assigned but never used
-    // let bool = e.target.checked
-    // let newFilter = {...this.state.filterBy}
     this.setState({
       filterBy: {...this.state.filterBy, [e.target.name] : e.target.checked}
     })
@@ -163,6 +189,14 @@ class App extends Component {
   selectMyEvent = (e) => {
     this.setState({
       mySelectedEvent: e
+    }, () => {
+
+      getEventComments(this.state.current_user.id, localStorage.getItem('token'),this.state.mySelectedEvent.meetup_id)
+      .then(comments => {
+        this.setState({
+          comments: comments
+        })
+      })
     })
   }
 
@@ -174,50 +208,16 @@ class App extends Component {
   document.getElementById("mySidebar").style.display = "none";
   }
 
-
-
-  // fetch('http://localhost:3008/api/v1/events', {
-  //   method: "POST",
-  //   headers: {
-  //     "Content-type" : "application/json"
-  //   },
-  //   body: body
-  // })
-  // .then(r => console.log(r))
-
-
   getEventData = (e, topic, location) => {
-    console.log(e)
-    console.log(topic)
-    console.log(location)
-
     e.preventDefault()
-    fetch(`http://localhost:3000/api/v1/getevents?topic=${topic}&location=${location}`)
+    fetch(`http://localhost:3008/api/v1/getevents?topic=${topic}&location=${location}`)
     .then(r => r.json())
     .then(events => {
-      // console.log(events)
       this.setState({
         events: events
       })
     })
   }
-
-  // renderMapOrMyEvents = (filteredEvents) => {
-  //   if (!this.state.myEvents) {
-  //     return (
-  //       <Map
-  //         selectEvent={this.selectEvent}
-  //         selectedEvent={this.state.selectedEvent}
-  //         events={filteredEvents}
-  //       />
-  //     )
-  //   }
-  //   else {
-  //     return (
-  //        <MyEvents/>
-  //     )
-  //   }
-  // }
 
   setCenter = (address) => {
     fetch(`https://maps.googleapis.com/maps/api/geocode/json?address=${address}&key=AIzaSyAhlNg9SyzsjkZk-9rTBDC8BthNPMbH-uc`)
@@ -416,11 +416,16 @@ class App extends Component {
                   <SideEventDetails
                     addToMyEvents={this.addToMyEvents}
                     selectedEvent={this.state.selectedEvent}
+                    addComment={this.addComment}
+                    current_user={this.state.current_user}
                     selectEvent={this.selectEvent}/>
                   : null
                 }
                 {this.state.mySelectedEvent ?
                   <MySideEventDetails
+                    addComment={this.addComment}
+                    comments={this.state.comments}
+                    current_user={this.state.current_user}
                     destroyMyEvent={this.destroyMyEvent}
                     mySelectedEvent={this.state.mySelectedEvent}
                     selectMyEvent={this.selectMyEvent}/>

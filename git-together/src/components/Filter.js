@@ -29,9 +29,9 @@ class Filter extends React.Component {
           &ensp;
           <span>Tomorrow</span>
         </div>
-      
+
         <label htmlFor="dateFrom">From
-         <input
+         &ensp;<input
           name="dateFrom"
           type="date"
           onChange={(e) => {
@@ -41,7 +41,7 @@ class Filter extends React.Component {
         </label>
 
         <label htmlFor="dateUntil">Until
-         <input
+         &ensp;<input
           name="dateUntil"
           type="date"
           onChange={(e) => {
@@ -50,7 +50,7 @@ class Filter extends React.Component {
         }/>
         </label>
       </React.Fragment>
-     
+
     )
   }
 }
