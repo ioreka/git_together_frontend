@@ -82,6 +82,7 @@ setComments = (comment) => {
 
 
   addToMyEvents = (event) => {
+    if (this.state.current_user) {
       if (!this.state.myEvents.includes(event)) {
         this.setState({
             myEvents: [...this.state.myEvents, event]
@@ -96,6 +97,13 @@ setComments = (comment) => {
       else {
         alert("This event is already in your calendar")
       }
+    } else {
+      alert("You have to be logged in to do that!")
+      this.setState({
+        selectedEvent: false
+      })
+      //redirect to signup page or login page
+    }
     }
 
 
