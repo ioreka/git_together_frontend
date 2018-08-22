@@ -72,7 +72,6 @@ setComments = (comment) => {
 
 
   deleteAndSetMyEvents = (event) => {
-    console.log("deleteAndSetMyEvents is run");
     deleteFromMyEventsList(this.state.current_user.id, localStorage.getItem('token'), event).then(new_events => {
       this.setState({
         myEvents: new_events
@@ -102,13 +101,11 @@ setComments = (comment) => {
       this.setState({
         selectedEvent: false
       })
-      //redirect to signup page or login page
     }
     }
 
 
   destroyMyEvent = (event) => {
-    console.log("destroyMyEvent is run");
     this.setState(prevState => {
       prevState.myEvents.splice(prevState.myEvents.indexOf(event), 1)
       return {
@@ -182,7 +179,6 @@ setComments = (comment) => {
   }
 
   filterEventsFromUntil = (e) => {
-    let newFilter = {...this.state.filterBy}
     this.setState({
       filterBy: {...this.state.filterBy, [e.target.name] : e.target.value}
     })
