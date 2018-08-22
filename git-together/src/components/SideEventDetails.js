@@ -40,11 +40,12 @@ class SideEventDetails extends React.Component {
        <a href={this.props.selectedEvent.link} target="_blank"><h4>{this.props.selectedEvent.name}</h4></a>
        <h5>Group: {this.props.selectedEvent.group.name}</h5>
         <div>
-          <p>{this.props.selectedEvent.local_date} - {this.props.selectedEvent.local_time}</p>
+          <p>&#128197; {this.props.selectedEvent.local_date}</p>
+          <p>&#128336; {this.props.selectedEvent.local_time}</p>
           <a
             href={mapLink}
             target="_blank">
-            <img src="./Maps-icon-16.png" alt=""/>
+            &#128205;
               {this.props.selectedEvent.venue ? this.props.selectedEvent.venue.address_1 : this.props.selectedEvent.group.localized_location}
               {this.props.selectedEvent.venue ? this.props.selectedEvent.venue.city : null}</a>
         </div>

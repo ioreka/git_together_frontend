@@ -68,11 +68,19 @@ class App extends Component {
 
 
   addToMyEvents = (event) => {
+    if (this.state.current_user) {
       if (!this.state.myEvents.includes(event)) {
         this.setState({
             myEvents: [...this.state.myEvents, event]
         }, this.setEvents)
       }
+    } else {
+      alert("You have to be logged in to do that!")
+      this.setState({
+        selectedEvent: false
+      })
+      //redirect to signup page or login page
+    }
     }
 
 
