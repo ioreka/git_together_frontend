@@ -19,12 +19,12 @@ class MySideEventDetails extends React.Component {
        <a href={this.props.mySelectedEvent.meetup_link} target="_blank"><h4>{this.props.mySelectedEvent.name}</h4></a>
        <h5>Group: {this.props.mySelectedEvent.group_name}</h5>
         <div>
-          <p>&#128197; {this.props.mySelectedEvent.local_date}</p>
-          <p>&#128336; {this.props.mySelectedEvent.local_time}</p>
+          <p> <span role="img" aria-label="calendar">&#128197;{this.props.mySelectedEvent.local_date}</span></p>
+          <p> <span role="img" aria-label="clock">&#128336;{this.props.mySelectedEvent.local_time}</span></p>
           <a
             href={mapLink}
             target="_blank">
-            &#128205;
+            <span role="img"aria-label="pin">&#128205;</span>
               {this.props.mySelectedEvent.address}
           </a>
         </div>

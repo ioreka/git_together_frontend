@@ -6,7 +6,7 @@ class Filter extends React.Component {
   render() {
     return (
       <React.Fragment>
-        <div class="inline-field">
+        <div className="inline-field">
           <input
           name="today"
           type="checkbox"
@@ -18,7 +18,7 @@ class Filter extends React.Component {
           <span>Today</span>
         </div>
 
-        <div class="inline-field">
+        <div className="inline-field">
           <input
           name="tomorrow"
           type="checkbox"
@@ -29,7 +29,7 @@ class Filter extends React.Component {
           &ensp;
           <span>Tomorrow</span>
         </div>
-      
+
         <label htmlFor="dateFrom">From
          <input
           name="dateFrom"
@@ -50,7 +50,7 @@ class Filter extends React.Component {
         }/>
         </label>
       </React.Fragment>
-     
+
     )
   }
 }

@@ -59,7 +59,6 @@ const setUserEvents = (id, token, events) => {
 }
 
 const deleteFromMyEventsList = (id, token, ev) => {
-  console.log("deleteFromMyEventsList is run");
   return fetch(`${urlBase}/users/${id}/events`, {
     headers: {
       'Content-Type': 'application/json',

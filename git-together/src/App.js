@@ -39,7 +39,6 @@ class App extends Component {
     if (this.state.current_user && this.state.current_user !== this.state.previouslySeenUser) {
       getUserEvents(this.state.current_user.id, localStorage.getItem('token'))
       .then(events => {
-        // console.log(events);
         this.setState({
           myEvents: events,
           previouslySeenUser: this.state.current_user
@@ -58,7 +57,6 @@ class App extends Component {
 
 
   deleteAndSetMyEvents = (event) => {
-    console.log("deleteAndSetMyEvents is run");
     deleteFromMyEventsList(this.state.current_user.id, localStorage.getItem('token'), event).then(new_events => {
       this.setState({
         myEvents: new_events
@@ -79,13 +77,11 @@ class App extends Component {
       this.setState({
         selectedEvent: false
       })
-      //redirect to signup page or login page
     }
     }
 
 
   destroyMyEvent = (event) => {
-    console.log("destroyMyEvent is run");
     this.setState(prevState => {
       prevState.myEvents.splice(prevState.myEvents.indexOf(event), 1)
       return {
@@ -156,7 +152,6 @@ class App extends Component {
   }
 
   filterEventsFromUntil = (e) => {
-    let newFilter = {...this.state.filterBy}
     this.setState({
       filterBy: {...this.state.filterBy, [e.target.name] : e.target.value}
     })
