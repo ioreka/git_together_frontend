@@ -30,7 +30,7 @@ class Map extends React.Component {
     return (
       <React.Fragment>
       <div className="w3-container">
-          <div style={{ height: '100vh', width: '100%' }}>
+          <div style={{ height: '95vh', width: '100%' }}>
             <GoogleMapReact
               bootstrapURLKeys={{ key: "AIzaSyAhlNg9SyzsjkZk-9rTBDC8BthNPMbH-uc"}}
               defaultCenter={this.props.center}
